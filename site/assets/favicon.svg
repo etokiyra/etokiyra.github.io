@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="A small lavender cat beneath a crescent moon">
+  <rect width="64" height="64" rx="13" fill="#0b0e1b"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="12.5" fill="none" stroke="#2c3050"/>
+  <circle cx="12" cy="12" r="1" fill="#c9b8f4" opacity="0.55"/>
+  <circle cx="48" cy="36" r="0.9" fill="#efa7c8" opacity="0.7"/>
+  <circle cx="15" cy="47" r="0.8" fill="#9fe6c4" opacity="0.6"/>
+  <path d="M49 8a9 9 0 1 0 7 14 7.4 7.4 0 1 1-7-14Z" fill="#f1d6a4" opacity="0.9"/>
+  <path d="M15 30 18 17l10 7Z" fill="#c9b8f4"/>
+  <path d="M43 30 40 17l-10 7Z" fill="#c9b8f4"/>
+  <path d="M13 33c0-9 7.4-14 17-14s17 5 17 14v6c0 8-7 13-17 13S13 47 13 39Z" fill="#c9b8f4"/>
+  <ellipse cx="23.5" cy="34.5" rx="2.7" ry="3.3" fill="#0b0e1b"/>
+  <ellipse cx="38.5" cy="34.5" rx="2.7" ry="3.3" fill="#0b0e1b"/>
+  <circle cx="24.4" cy="33.4" r="0.9" fill="#9fe6c4"/>
+  <circle cx="39.4" cy="33.4" r="0.9" fill="#9fe6c4"/>
+  <path d="M29.4 41.2h3.2L31 43Z" fill="#d78bb0"/>
+  <path d="M31 43c0 1.6-1.7 2.6-3.2 2M31 43c0 1.6 1.7 2.6 3.2 2" fill="none" stroke="#6f6592" stroke-width="1.1" stroke-linecap="round"/>
+  <path d="M15 37h-6M15 40.5H9.5M47 37h6M47 40.5h5.5" stroke="#8d86a8" stroke-width="1.1" stroke-linecap="round" opacity="0.75"/>
+</svg>
