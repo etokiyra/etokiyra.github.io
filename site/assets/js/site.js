@@ -2,16 +2,16 @@
   "use strict";
 
   /* ------------------------------------------------------------------ *
-   *  kiyra.lol — suzu is a real cat, and this is her good life.         *
+   *  kiyra.lol — suzu is a real cat, drawn from the reference sheet.    *
    *                                                                     *
-   *  She keeps a crepuscular predator's schedule on your local clock:   *
-   *  hunting at midnight, zoomies at dawn, napping through the          *
-   *  morning, sunbathing at noon, loafing all afternoon, playing at     *
-   *  dusk, grooming in the evening, dozing before the hunt resumes.     *
+   *  Her art comes verbatim from the cat reference: the sitting cat is  *
+   *  her awake body, the sleeping cat is her asleep body, and her face  *
+   *  only ever swaps between the reference faces (o.o ^.^ O.O >.< -.-   *
+   *  *.*). The waving cat's raised paw greets you when she is happy.    *
    *                                                                     *
-   *  There is no hunger meter and nothing decays — this is the good     *
-   *  part of a tamagotchi, permanently online. Care happens through     *
-   *  the buttons beside her; the console is for talking.                *
+   *  She keeps a crepuscular predator's schedule on your local clock,   *
+   *  nothing ever depletes — the good half of a tamagotchi, forever     *
+   *  online — and care happens through the buttons beside her.          *
    *                                                                     *
    *  Everything here is decoration: without this file the site is       *
    *  fully readable, and every effect respects prefers-reduced-motion.  *
@@ -56,24 +56,28 @@
     `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
 
   /* ------------------------------------------------------------------ *
+   *  The reference faces — copied character for character.              *
+   * ------------------------------------------------------------------ */
+
+  const FACES = {
+    awake: { face: " o.o ", mouth: " ^ " },
+    happy: { face: " ^.^ ", mouth: " w " },
+    surprise: { face: " O.O ", mouth: " o " },
+    sly: { face: " >.< ", mouth: " ^ " },
+    starry: { face: " *.* ", mouth: " ^ " },
+    blink: { face: " -.- ", mouth: " ^ " },
+    asleep: { face: " -.- ", mouth: " ^ " },
+  };
+
+  /* The two reference bodies. Line 2 of each is padded so the floating
+     heart beside her never moves when she curls up. */
+  const SIT_FIGURE = "(  | |  )\n            \\_| |_/~            ";
+  const SLEEP_FIGURE = "(_______)~\n" + " ".repeat(32);
+
+  /* ------------------------------------------------------------------ *
    *  Suzu's day — a crepuscular predator's schedule, by local hour.     *
    *  `to` is exclusive; hour 24 wraps to 0.                             *
    * ------------------------------------------------------------------ */
-
-  const FACE = {
-    asleep: "-ω-",
-    dozing: "oω-",
-    asleep2: "=ω=",
-    awake: "oωo",
-    wide: "0ω0",
-    hunting: "@ω@",
-    blink: "-ω-",
-    happy: "^ω^",
-    love: "^ω^",
-    shock: "OωO",
-    drowsy: "-ωo",
-    slit: ">ω<",
-  };
 
   const SCHEDULE = [
     {
@@ -81,24 +85,23 @@
       from: 0,
       to: 5,
       asleep: false,
-      tail: 420,
       blinkEvery: [3200, 6500],
       noteEvery: [7000, 14000],
       notes: ["!", "?", "!"],
-      faces: [FACE.hunting, FACE.wide, FACE.awake],
+      faces: ["sly"],
       status: [
         "hunting at {t} — peak predator hours",
         "prowling the dark between keys",
         "tracking something only she can see",
         "a shadow moves. suzu moves faster.",
-        "ears flat, pupils wide. the hunt is on.",
+        "ears flat, eyes narrowed. the hunt is on.",
         "somewhere a cursor blinks. suzu hunts it.",
         "silence. then: the pounce.",
         "the midnight shift is hers alone.",
         "she has not blinked in four minutes.",
       ],
       arrives: [
-        "the clock hits midnight. suzu's eyes go wide.",
+        "the clock hits midnight. suzu's eyes narrow.",
         "hunting hours. she slips off the windowsill.",
       ],
       talk: [
@@ -116,11 +119,10 @@
       from: 5,
       to: 8,
       asleep: false,
-      tail: 260,
       blinkEvery: [2400, 5200],
       noteEvery: [5000, 9000],
       notes: ["♪", "!", "♪", "♪"],
-      faces: [FACE.awake, FACE.happy, FACE.wide],
+      faces: ["happy"],
       status: [
         "DAWN ZOOMIES. hold on to something.",
         "three laps around the desk at {t}",
@@ -149,11 +151,10 @@
       from: 8,
       to: 12,
       asleep: true,
-      tail: 1400,
       blinkEvery: [9000, 16000],
       noteEvery: [6000, 11000],
       notes: ["z", "z", "z"],
-      faces: [FACE.asleep, FACE.asleep2, FACE.asleep],
+      faces: ["asleep"],
       status: [
         "asleep at {t} — morning nap",
         "sleeping off the dawn shift",
@@ -164,7 +165,7 @@
         "a nap earned by the zoomies of dawn",
       ],
       arrives: [
-        "the dawn shift ends. suzu crashes, mid-stride almost.",
+        "the dawn shift ends. suzu curls into the sleeping pose.",
         "morning nap taken. dignity optional.",
       ],
       talk: [
@@ -185,11 +186,10 @@
       from: 12,
       to: 14,
       asleep: true,
-      tail: 1700,
       blinkEvery: [11000, 18000],
       noteEvery: [9000, 15000],
       notes: ["z", "z"],
-      faces: [FACE.asleep, FACE.dozing, FACE.asleep],
+      faces: ["asleep"],
       status: [
         "sunbathing at {t} — warmth acquired",
         "recharging in the light patch",
@@ -218,11 +218,10 @@
       from: 14,
       to: 17,
       asleep: false,
-      tail: 900,
       blinkEvery: [4200, 8200],
       noteEvery: [11000, 19000],
       notes: ["♪", "·", "♪"],
-      faces: [FACE.drowsy, FACE.dozing, FACE.asleep2, FACE.drowsy],
+      faces: ["awake"],
       status: [
         "loafing. fully bread-shaped.",
         "watching you with half-closed eyes",
@@ -233,7 +232,7 @@
         "the loaf endures at {t}",
       ],
       arrives: [
-        "suzu folds herself into a loaf. afternoon begins.",
+        "suzu sits back down and pretends to be a loaf. afternoon begins.",
         "energy saved for dusk. loaf mode engaged.",
       ],
       talk: [
@@ -250,11 +249,10 @@
       from: 17,
       to: 21,
       asleep: false,
-      tail: 340,
       blinkEvery: [2800, 6000],
       noteEvery: [5500, 10000],
       notes: ["♪", "!", "♪", "✦"],
-      faces: [FACE.awake, FACE.happy, FACE.wide],
+      faces: ["happy", "awake"],
       status: [
         "playing at {t} — the dusk shift",
         "a bottle cap is the finest toy",
@@ -282,11 +280,10 @@
       from: 21,
       to: 23,
       asleep: false,
-      tail: 760,
       blinkEvery: [4600, 9000],
       noteEvery: [12000, 20000],
       notes: ["♪", "·"],
-      faces: [FACE.happy, FACE.asleep2, FACE.happy],
+      faces: ["awake", "happy"],
       status: [
         "grooming — evening maintenance",
         "washing behind the ears",
@@ -312,11 +309,10 @@
       from: 23,
       to: 24,
       asleep: true,
-      tail: 1500,
       blinkEvery: [10000, 17000],
       noteEvery: [8000, 13000],
       notes: ["z", "z"],
-      faces: [FACE.dozing, FACE.asleep, FACE.dozing],
+      faces: ["asleep"],
       status: [
         "dozing off at {t}",
         "eyes heavy. the keyboard is warm.",
@@ -325,7 +321,7 @@
         "pre-hunt hibernation. a known tactic.",
       ],
       arrives: [
-        "suzu's eyes narrow. the pre-hunt doze takes her.",
+        "suzu curls up where she stands. the pre-hunt doze takes her.",
         "dozing. the midnight shift will wake her on its own.",
       ],
       talk: [
@@ -351,8 +347,12 @@
 
   const art = {
     face: $("#suzu-face"),
+    mouth: $("#suzu-mouth"),
+    mouthRow: $("#suzu-mouth-row"),
+    wave: $("#suzu-wave"),
+    figure: $("#suzu-figure"),
     zz: $("#suzu-zz"),
-    tail: $("#suzu-tail"),
+    scene: $("#suzu-art"),
     window: $(".mascot-window"),
     status: $("#suzu-status"),
     body: $(".window-body"),
@@ -360,9 +360,8 @@
   };
 
   let current = stateFor();
-  let overrideFace = null; // {face, until}
+  let overrideFace = null; // {key, until}
   let consoleAPI = null;
-  let tailToken = 0;
 
   const setStatus = (text) => {
     if (art.status) art.status.textContent = text;
@@ -373,23 +372,40 @@
     return text.replace("{t}", hhmm());
   };
 
-  const setFace = (face) => {
-    if (art.face) art.face.textContent = face;
+  const applyFace = (key) => {
+    const face = FACES[key];
+    if (!face) return;
+    if (art.face) art.face.textContent = face.face;
+    if (art.mouth) art.mouth.textContent = face.mouth;
   };
 
   const renderFace = () => {
     if (!art.face) return;
     if (overrideFace && Date.now() < overrideFace.until) {
-      setFace(overrideFace.face);
+      applyFace(overrideFace.key);
       return;
     }
     overrideFace = null;
-    setFace(pick(current.faces));
+    applyFace(pick(current.faces));
   };
 
-  const celebrate = (face, ms) => {
-    overrideFace = { face, until: Date.now() + ms };
-    setFace(face);
+  const flashFace = () => {
+    if (!art.face || !motionOK()) return;
+    art.face.classList.remove("flash");
+    void art.face.offsetWidth;
+    art.face.classList.add("flash");
+  };
+
+  const celebrate = (key, ms, wave = false) => {
+    overrideFace = { key, until: Date.now() + ms };
+    applyFace(key);
+    flashFace();
+    if (wave && art.wave) {
+      art.wave.textContent = "/";
+      window.setTimeout(() => {
+        art.wave.textContent = " ";
+      }, ms);
+    }
   };
 
   const sparkles = () => {
@@ -399,8 +415,16 @@
     art.window.classList.add("is-petted");
   };
 
+  const morph = () => {
+    if (!art.scene || !motionOK()) return;
+    art.scene.classList.remove("is-morphing");
+    void art.scene.offsetWidth;
+    art.scene.classList.add("is-morphing");
+    window.setTimeout(() => art.scene.classList.remove("is-morphing"), 480);
+  };
+
   /* ------------------------------------------------------------------ *
-   *  Particles — zzz, hearts, notes, fish, laser, box                   *
+   *  Particles — zzz, hearts, notes, fish, yarn, paw, box               *
    * ------------------------------------------------------------------ */
 
   const spawnNote = (glyph, cls) => {
@@ -424,10 +448,20 @@
     if (!art.body || !motionOK()) return;
     const fish = document.createElement("span");
     fish.className = "fish";
-    fish.textContent = "><(((º>";
-    fish.style.top = `${rand(38, 50).toFixed(1)}%`;
+    fish.textContent = "><(((\">";
+    fish.style.top = `${rand(24, 34).toFixed(1)}%`;
     art.body.append(fish);
     fish.addEventListener("animationend", () => fish.remove());
+  };
+
+  const spawnYarn = () => {
+    if (!art.body || !motionOK()) return;
+    const yarn = document.createElement("span");
+    yarn.className = "yarn";
+    yarn.textContent = "(@)~~~";
+    yarn.style.top = `${rand(30, 40).toFixed(1)}%`;
+    art.body.append(yarn);
+    yarn.addEventListener("animationend", () => yarn.remove());
   };
 
   const spawnLaser = () => {
@@ -438,21 +472,28 @@
     dot.addEventListener("animationend", () => dot.remove());
   };
 
-  const spawnBox = () => {
+  const spawnPaw = () => {
     if (!art.body || !motionOK()) return;
-    const box = document.createElement("span");
-    box.className = "box-particle";
-    art.body.append(box);
-    box.addEventListener("animationend", () => box.remove());
+    const paw = document.createElement("span");
+    paw.className = "paw";
+    paw.textContent = "  (_)  (_)\n (_)    (_)\n    .--.\n   (    )\n    `--'";
+    paw.style.left = `${rand(62, 74).toFixed(1)}%`;
+    paw.style.top = `${rand(18, 30).toFixed(1)}%`;
+    art.body.append(paw);
+    paw.addEventListener("animationend", () => paw.remove());
   };
 
-  const spawnFeather = () => {
+  const BOX_CAT = "  /\\_/\\\n ( o.o )\n +-----+\n |     |\n +-----+";
+
+  const spawnBoxCat = () => {
     if (!art.body || !motionOK()) return;
-    const feather = document.createElement("span");
-    feather.className = "feather";
-    feather.textContent = "~o~";
-    art.body.append(feather);
-    feather.addEventListener("animationend", () => feather.remove());
+    const box = document.createElement("span");
+    box.className = "box-cat";
+    box.textContent = BOX_CAT;
+    box.style.left = `${rand(26, 44).toFixed(1)}%`;
+    box.style.top = `${rand(24, 36).toFixed(1)}%`;
+    art.body.append(box);
+    box.addEventListener("animationend", () => box.remove());
   };
 
   const footerNotes = () => {
@@ -460,7 +501,7 @@
     if (!holder || !motionOK()) return;
     const note = document.createElement("span");
     note.className = "float-note footer-z";
-    note.textContent = "z";
+    note.textContent = pick(["z", "Z"]);
     note.style.left = `${rand(44, 58).toFixed(1)}%`;
     note.style.top = `${rand(30, 44).toFixed(1)}%`;
     holder.append(note);
@@ -534,6 +575,7 @@
       "tucks a paw over the cursor.",
       "headbutts your hand. rude, but affectionate.",
       "flops over. full trust.",
+      "raises a paw to wave back.",
     ]);
   };
 
@@ -557,9 +599,10 @@
 
     setStatus(`suzu ${message}`);
     if (asleep) {
-      celebrate(FACE.dozing, 1600);
+      celebrate("asleep", 1600);
     } else {
-      celebrate(pick([FACE.happy, FACE.love, FACE.slit]), 2400);
+      celebrate("happy", 2400, true);
+      spawnPaw();
     }
     sparkles();
     burstHearts(asleep ? 1 : 3);
@@ -568,7 +611,8 @@
 
   const wakeUp = (reason) => {
     if (!current.asleep) return false;
-    celebrate(FACE.shock, 1400);
+    morph();
+    celebrate("surprise", 1500);
     sparkles();
     if (reason === "laser") {
       setStatus("THE DOT. SUZU IS AWAKE. THE DOT.");
@@ -576,18 +620,26 @@
     } else {
       setStatus("suzu wakes. judges you. forgives you. mostly.");
     }
-    window.setTimeout(renderFace, 1500);
+    window.setTimeout(renderFace, 1600);
     return true;
   };
 
   const applyState = (state, announce = false) => {
+    const wasAsleep = current.asleep;
     current = state;
-    tailToken += 1;
     overrideFace = null;
 
     if (art.zz) {
-      art.zz.textContent = state.asleep ? "z z" : "   ";
+      art.zz.textContent = state.asleep ? " zZz" : "    ";
     }
+    if (art.figure && state.asleep !== wasAsleep) {
+      art.figure.textContent = state.asleep ? SLEEP_FIGURE : SIT_FIGURE;
+      morph();
+    }
+    if (art.mouthRow) {
+      art.mouthRow.classList.toggle("is-hidden", state.asleep);
+    }
+    if (art.wave) art.wave.textContent = " ";
     if (art.window) {
       art.window.classList.toggle("is-sunbathing", state.name === "sunbathing");
       art.window.classList.toggle("is-breathing", state.asleep);
@@ -601,7 +653,6 @@
         for (let i = 0; i < 3; i += 1) window.setTimeout(() => spawnNote("z", ""), i * 300);
       }
     }
-    startTail();
   };
 
   const checkSchedule = () => {
@@ -610,30 +661,8 @@
   };
 
   /* ------------------------------------------------------------------ *
-   *  Loops: tail, blinking, idle particles, the minute hand             *
+   *  Loops: blinking, idle particles, the minute hand                   *
    * ------------------------------------------------------------------ */
-
-  const TAIL_FRAMES = [
-    "~~~~~~",
-    "~▌~~~~",
-    "~~▌~~~",
-    "~~~▌~~",
-    "~~~~▌~",
-    "~~~▌~~",
-    "~~▌~~~",
-    "~▌~~~~",
-  ];
-  const startTail = () => {
-    const token = tailToken;
-    let index = 0;
-    const step = () => {
-      if (token !== tailToken || !art.tail) return;
-      index = (index + 1) % TAIL_FRAMES.length;
-      art.tail.textContent = TAIL_FRAMES[index];
-      window.setTimeout(step, current.tail);
-    };
-    window.setTimeout(step, current.tail);
-  };
 
   const startBlinking = () => {
     const step = () => {
@@ -642,7 +671,7 @@
         if (current.asleep) {
           renderFace(); /* sleep faces drift */
         } else {
-          setFace(FACE.blink);
+          applyFace("blink");
           window.setTimeout(() => {
             if (!overrideFace) renderFace();
           }, 170);
@@ -661,6 +690,7 @@
         const cls =
           glyph === "!" ? "tint-gold" : glyph === "♪" ? "tint-mint" : glyph === "♡" ? "tint-heart" : "";
         spawnNote(glyph, cls);
+        if (!current.asleep && Math.random() < 0.1) spawnNote("=^.^=", "tint-heart");
         if (!current.asleep && Math.random() < 0.12) burstHearts(1);
       }
       window.setTimeout(step, rand(minDelay, maxDelay));
@@ -701,8 +731,12 @@
               "the treat is gone. the memory remains.",
               "suzu: (she leads you to the bowl even though she just ate.)",
             ]);
-        setStatus(line.replace(/^suzu: /, "suzu: "));
-        celebrate(current.asleep ? FACE.dozing : FACE.love, 2600);
+        setStatus(line);
+        if (current.asleep) {
+          celebrate("asleep", 1800);
+        } else {
+          celebrate("happy", 2600, true);
+        }
         if (!current.asleep) burstHearts(2);
         if (consoleAPI && Math.random() < 0.4) consoleAPI.note(line);
       },
@@ -722,22 +756,22 @@
           if (consoleAPI && Math.random() < 0.4) consoleAPI.note(line);
           return;
         }
-        spawnFeather();
-        celebrate(FACE.wide, 1300);
+        if (Math.random() < 0.4) spawnYarn();
+        celebrate("surprise", 1300);
         sparkles();
         const line = pick([
           "the feather dangles. the pounce lands. the feather escapes. classic.",
           "suzu: (butt wiggle. pre-pounce. brace yourself.)",
           "she catches the invisible. victory is declared.",
           "three consecutive air-pounces. the crowd goes quiet.",
-          "the bottle cap is flicked under the desk. round two.",
+          "the yarn rolls past. she gives chase. the yarn wins.",
           "suzu: again. AGAIN. (the feather is tired. suzu is not.)",
           "a full sprint, a skid, a leap. ten out of ten. no notes.",
           "the feather is batted behind the window bar. a draw.",
         ]);
         setStatus(line);
         window.setTimeout(() => {
-          celebrate(FACE.happy, 1800);
+          celebrate("happy", 1800, true);
           burstHearts(1);
         }, 1400);
         if (consoleAPI && Math.random() < 0.4) consoleAPI.note(line);
@@ -759,7 +793,11 @@
               "every whisker accounted for. inspection passed.",
             ]);
         setStatus(line);
-        celebrate(current.asleep ? FACE.asleep2 : FACE.happy, 2200);
+        if (current.asleep) {
+          celebrate("asleep", 2200);
+        } else {
+          celebrate("happy", 2200);
+        }
         if (consoleAPI && Math.random() < 0.4) consoleAPI.note(line);
       },
     },
@@ -770,7 +808,7 @@
         store.set("suzu-lasers", ledger.lasers);
         spawnLaser();
         if (current.asleep) wakeUp("laser");
-        else celebrate(FACE.hunting, 2200);
+        else celebrate("sly", 2200);
         const line = pick([
           "suzu pounces. the dot escapes. obviously.",
           "a wall. a bookshelf. nowhere is safe. the dot remains free.",
@@ -1113,7 +1151,7 @@
           }
           return "a paw twitches. the meow was absorbed by the nap.";
         }
-        celebrate(pick([FACE.shock, FACE.happy, FACE.love]), 1600);
+        celebrate(pick(["surprise", "happy"]), 1600);
         return pick([
           "suzu: meow.",
           "suzu: meow. (translation: feed the compiler.)",
@@ -1126,7 +1164,7 @@
       },
       purr: () => {
         sparkles();
-        celebrate(FACE.happy, 2000);
+        celebrate("happy", 2000);
         return "suzu purrs. the window vibrates faintly. ♡";
       },
 
@@ -1141,7 +1179,7 @@
 
       /* --- toys that are not care --- */
       box: () => {
-        spawnBox();
+        spawnBoxCat();
         return pick([
           "a box? WHERE. (it's the console. she is in it.)",
           "suzu: if it fits, i sits. she fits. she sits.",
@@ -1149,13 +1187,13 @@
         ]);
       },
       cucumber: () => {
-        celebrate(FACE.shock, 2600);
+        celebrate("surprise", 2600);
         sparkles();
         return "suzu: DO NOT. bring that. here. (she is on the ceiling.)";
       },
       bird: () => {
         if (current.asleep) return "even asleep, her ears rotate toward the word 'bird'.";
-        celebrate(FACE.hunting, 2000);
+        celebrate("sly", 2000);
         return "suzu: ek-ek-ek-ek. (the glass remains undefeated.)";
       },
 
@@ -1163,6 +1201,7 @@
       moon: () => {
         shootStar();
         if (art.moon) glowMoon();
+        if (!current.asleep) celebrate("starry", 2600);
         return "a shooting star crosses the hero. wish noted.";
       },
       stars: () => {
@@ -1448,6 +1487,7 @@
         glowMoon();
         shootStar();
         setStatus(`suzu watches the shooting star. (${current.name} hours)`);
+        if (!current.asleep) celebrate("starry", 2600);
         window.setTimeout(() => setStatus(statusFromPool(current, current.status)), 3200);
       });
     }
@@ -1589,7 +1629,7 @@
     layer.setAttribute("aria-hidden", "true");
     document.body.append(layer);
 
-    const glyphs = ["✦", "✧", "·", "♡", "✦", "✧"];
+    const glyphs = ["✦", "✧", "·", "=^..^=", "♡", "~(=^..^)"];
     const tints = ["", "tint-pink", "tint-mint", "tint-gold"];
 
     for (let i = 0; i < 26; i += 1) {
@@ -1633,7 +1673,7 @@
         if (progress === konami.length) {
           progress = 0;
           starRain();
-          celebrate(FACE.love, 3200);
+          if (!current.asleep) celebrate("happy", 3200, true);
           burstHearts(4);
           setStatus("the stars obey you. ✦");
           if (consoleAPI) consoleAPI.note("✦ konami accepted. the stars obey you.");
@@ -1649,7 +1689,7 @@
       typed = (typed + event.key.toLowerCase()).slice(-4);
       if (typed !== "meow") return;
       typed = "";
-      celebrate(FACE.happy, 2000);
+      if (!current.asleep) celebrate("happy", 2000);
       sparkles();
       setStatus(current.asleep ? "suzu heard that. in her dream." : "suzu heard that. meow.");
       if (consoleAPI) {

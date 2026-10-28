@@ -647,9 +647,9 @@ pre,
   text-shadow: 0 0 16px rgba(201, 184, 244, 0.18);
 }
 
-.art-tail {
-  color: var(--mint);
-  animation: blink 1.6s steps(1, end) infinite;
+#suzu-mouth-row.is-hidden {
+  color: transparent;
+  text-shadow: none;
 }
 
 .art-sill {
@@ -1840,6 +1840,76 @@ html.js .art-moon {
 
 .art-zz {
   color: var(--dim);
+  animation: zz-pulse 3.2s ease-in-out infinite;
+}
+
+@keyframes zz-pulse {
+  0%, 100% {
+    opacity: 0.55;
+    text-shadow: none;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 8px rgba(164, 157, 189, 0.5);
+  }
+}
+
+#suzu-face,
+#suzu-mouth,
+#suzu-wave {
+  transition: text-shadow 160ms ease;
+}
+
+#suzu-face.flash {
+  animation: face-flash 320ms ease;
+}
+
+@keyframes face-flash {
+  0% {
+    text-shadow: 0 0 2px rgba(201, 184, 244, 0);
+  }
+  40% {
+    text-shadow:
+      0 0 10px rgba(239, 167, 200, 0.9),
+      0 0 22px rgba(239, 167, 200, 0.4);
+  }
+  100% {
+    text-shadow: 0 0 2px rgba(201, 184, 244, 0);
+  }
+}
+
+/* The whole scene breathes: a slow, tiny bob. */
+html.js .mascot-art {
+  animation: art-bob 5.2s ease-in-out infinite;
+}
+
+@keyframes art-bob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.5px);
+  }
+}
+
+/* Curling up / waking up: a squash-and-stretch on the scene. */
+html.js .mascot-art.is-morphing {
+  animation: art-morph 460ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes art-morph {
+  0% {
+    transform: scaleY(1);
+  }
+  35% {
+    transform: scaleY(0.93) scaleX(1.02);
+  }
+  70% {
+    transform: scaleY(1.04) scaleX(0.99);
+  }
+  100% {
+    transform: scaleY(1);
+  }
 }
 
 .float-note {
@@ -1909,7 +1979,7 @@ html.js .art-moon {
   }
 }
 
-.feather {
+.yarn {
   position: absolute;
   z-index: 3;
   color: var(--gold);
@@ -1918,16 +1988,95 @@ html.js .art-moon {
   line-height: 1;
   pointer-events: none;
   text-shadow: 0 0 8px rgba(241, 214, 164, 0.5);
-  animation: feather-swing 2.2s ease-in-out forwards;
+  animation: yarn-roll 2.9s ease-in-out forwards;
 }
 
-@keyframes feather-swing {
-  0% { left: 14%; top: 16%; opacity: 0; transform: rotate(-14deg); }
-  10% { opacity: 1; }
-  30% { left: 30%; top: 22%; transform: rotate(10deg); }
-  55% { left: 48%; top: 15%; transform: rotate(-10deg); }
-  80% { left: 64%; top: 24%; transform: rotate(12deg); opacity: 1; }
-  100% { left: 72%; top: 18%; opacity: 0; transform: rotate(-8deg); }
+@keyframes yarn-roll {
+  0% {
+    left: 8%;
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  10% {
+    opacity: 1;
+  }
+  35% {
+    transform: translateY(-4px) rotate(180deg);
+  }
+  70% {
+    transform: translateY(3px) rotate(400deg);
+  }
+  100% {
+    left: 76%;
+    opacity: 0;
+    transform: translateY(-2px) rotate(620deg);
+  }
+}
+
+.paw {
+  position: absolute;
+  z-index: 3;
+  color: var(--lav-soft);
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.18;
+  white-space: pre;
+  pointer-events: none;
+  animation: paw-float 3s ease-out forwards;
+}
+
+@keyframes paw-float {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.7) rotate(-9deg);
+  }
+  16% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-54px) scale(1.05) rotate(7deg);
+  }
+}
+
+.box-cat {
+  position: absolute;
+  z-index: 3;
+  color: var(--lav);
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.18;
+  white-space: pre;
+  pointer-events: none;
+  text-shadow: 0 0 10px rgba(201, 184, 244, 0.25);
+  animation: box-drop 2.8s ease forwards;
+}
+
+@keyframes box-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.75);
+  }
+  22% {
+    opacity: 1;
+    transform: translateY(0) scale(1.04);
+  }
+  36% {
+    transform: rotate(-2.5deg);
+  }
+  52% {
+    transform: rotate(2deg);
+  }
+  68% {
+    transform: rotate(-1deg);
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) rotate(0deg);
+  }
 }
 
 .laser-dot {
@@ -1952,41 +2101,6 @@ html.js .art-moon {
   72% { top: 64%; left: 42%; }
   92% { opacity: 1; }
   100% { top: 26%; left: 58%; opacity: 0; }
-}
-
-.box-particle {
-  position: absolute;
-  z-index: 3;
-  top: 44%;
-  left: 44%;
-  width: 56px;
-  height: 36px;
-  border: 1px solid var(--lav-soft);
-  border-radius: 1px;
-  box-shadow: 3px 3px 0 rgba(201, 184, 244, 0.08);
-  pointer-events: none;
-  animation: box-pop 2.4s ease forwards;
-}
-
-@keyframes box-pop {
-  0% {
-    opacity: 0;
-    transform: scale(0.5) rotate(-4deg);
-  }
-  15% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-  45% {
-    transform: translateY(-4px) rotate(2deg);
-  }
-  70% {
-    transform: translateY(0) rotate(-1deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.94);
-  }
 }
 
 .mascot-window.is-sunbathing::before {
@@ -2553,8 +2667,7 @@ html.js .reveal.in .prose h2::after {
     opacity: 0.35;
   }
 
-  .cursor,
-  .art-tail {
+  .cursor {
     opacity: 1;
   }
 }
@@ -2598,9 +2711,10 @@ html.js .reveal.in .prose h2::after {
   .shooting-star,
   .float-note,
   .fish,
-  .feather,
-  .laser-dot,
-  .box-particle {
+  .yarn,
+  .paw,
+  .box-cat,
+  .laser-dot {
     display: none !important;
   }
 }
@@ -2623,10 +2737,22 @@ html.js .reveal.in .prose h2::after {
     transition: none;
   }
 
+  html.js .mascot-art,
+  html.js .mascot-art.is-morphing {
+    animation: none;
+  }
+
   .cursor-glow,
   .click-spark,
+  .click-ring,
   .star-rain,
-  .shooting-star {
+  .shooting-star,
+  .float-note,
+  .fish,
+  .yarn,
+  .paw,
+  .box-cat,
+  .laser-dot {
     display: none;
   }
 
