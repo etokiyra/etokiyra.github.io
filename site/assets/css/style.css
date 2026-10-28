@@ -1469,7 +1469,7 @@ html.js .mascot-art {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  max-height: 80px;
+  max-height: 96px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--line-strong) transparent;
@@ -1495,6 +1495,10 @@ html.js .mascot-art {
 
 .console-out .c-pink {
   color: var(--pink-soft);
+}
+
+.console-out .c-dim {
+  color: #615b7b;
 }
 
 .console-out .cmd {
@@ -1756,6 +1760,217 @@ html.js .art-moon {
 
 .project-link:hover span[aria-hidden] {
   transform: translate(2px, -2px);
+}
+
+/* --------------------------------------------------------------------------
+   Suzu lives here: particles, tail, sun patch, aurora
+   -------------------------------------------------------------------------- */
+
+.art-zz {
+  color: var(--dim);
+}
+
+.float-note {
+  position: absolute;
+  z-index: 3;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1;
+  pointer-events: none;
+  animation: note-float 2.4s ease-out forwards;
+}
+
+.float-note.tint-heart { color: var(--pink); }
+.float-note.tint-mint { color: var(--mint); }
+.float-note.tint-gold { color: var(--gold); }
+.float-note.footer-z { font-size: 9px; }
+
+@keyframes note-float {
+  0% {
+    opacity: 0;
+    transform: translate(0, 4px) scale(0.8);
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--nx, 8px), -30px) scale(1.05);
+  }
+}
+
+.fish {
+  position: absolute;
+  z-index: 3;
+  color: var(--mint);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow: 0 0 8px rgba(159, 230, 196, 0.5);
+  animation: fish-swim 2.6s ease-in-out forwards;
+}
+
+@keyframes fish-swim {
+  0% {
+    left: 6%;
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+  12% {
+    opacity: 1;
+  }
+  30% {
+    transform: translateY(-3px) rotate(-4deg);
+  }
+  55% {
+    transform: translateY(3px) rotate(4deg);
+  }
+  80% {
+    transform: translateY(-2px) rotate(-3deg);
+  }
+  100% {
+    left: 80%;
+    opacity: 0;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.laser-dot {
+  position: absolute;
+  z-index: 3;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5d8f;
+  box-shadow:
+    0 0 10px rgba(255, 93, 143, 0.9),
+    0 0 22px rgba(255, 93, 143, 0.45);
+  pointer-events: none;
+  animation: laser-chase 3.2s ease-in-out forwards;
+}
+
+@keyframes laser-chase {
+  0% { top: 22%; left: 64%; opacity: 0; }
+  8% { opacity: 1; }
+  25% { top: 56%; left: 28%; }
+  50% { top: 34%; left: 74%; }
+  72% { top: 64%; left: 42%; }
+  92% { opacity: 1; }
+  100% { top: 26%; left: 58%; opacity: 0; }
+}
+
+.box-particle {
+  position: absolute;
+  z-index: 3;
+  top: 44%;
+  left: 44%;
+  width: 56px;
+  height: 36px;
+  border: 1px solid var(--lav-soft);
+  border-radius: 1px;
+  box-shadow: 3px 3px 0 rgba(201, 184, 244, 0.08);
+  pointer-events: none;
+  animation: box-pop 2.4s ease forwards;
+}
+
+@keyframes box-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-4deg);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  45% {
+    transform: translateY(-4px) rotate(2deg);
+  }
+  70% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.94);
+  }
+}
+
+.mascot-window.is-sunbathing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 62% 52% at 78% 18%,
+    rgba(241, 214, 164, 0.14),
+    transparent 70%
+  );
+  animation: sun-pulse 7s ease-in-out infinite;
+}
+
+@keyframes sun-pulse {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; }
+}
+
+.mascot-window .window-body {
+  position: relative;
+  z-index: 1;
+}
+
+/* Breathing glow while she sleeps */
+html.js .mascot-window.is-breathing .art-cat {
+  animation: breathe 4.4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    text-shadow: 0 0 16px rgba(201, 184, 244, 0.18);
+  }
+  50% {
+    text-shadow: 0 0 26px rgba(201, 184, 244, 0.34);
+  }
+}
+
+/* Aurora drifting behind the hero */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 46% 38% at 22% 32%, rgba(140, 123, 217, 0.07), transparent 70%),
+    radial-gradient(ellipse 38% 34% at 74% 58%, rgba(239, 167, 200, 0.05), transparent 70%);
+  animation: aurora 46s ease-in-out infinite alternate;
+}
+
+@keyframes aurora {
+  from {
+    transform: translate3d(-2%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.06);
+  }
+}
+
+/* Headings underline themselves when revealed */
+html.js .section-intro h2::after,
+html.js .prose h2::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 1px;
+  margin-top: 14px;
+  background: linear-gradient(90deg, var(--pink), var(--lav) 60%, transparent);
+  transition: width 900ms cubic-bezier(0.2, 0.7, 0.2, 1) 260ms;
+}
+
+html.js .reveal.in .section-intro h2::after,
+html.js .reveal.in .prose h2::after {
+  width: clamp(64px, 9vw, 132px);
 }
 
 /* --------------------------------------------------------------------------
@@ -2285,7 +2500,11 @@ html.js .art-moon {
   .click-spark,
   .star-rain,
   .lamp,
-  .shooting-star {
+  .shooting-star,
+  .float-note,
+  .fish,
+  .laser-dot,
+  .box-particle {
     display: none !important;
   }
 }

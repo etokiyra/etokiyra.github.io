@@ -2,9 +2,15 @@
   "use strict";
 
   /* ------------------------------------------------------------------ *
-   *  kiyra.lol — suzu, her console, and the small hours of the page.   *
-   *  Everything here is decoration: without this file the site is      *
-   *  fully readable, and every effect respects prefers-reduced-motion. *
+   *  kiyra.lol — suzu is a real cat now.                                *
+   *                                                                     *
+   *  She keeps a crepuscular predator's schedule on your local clock:   *
+   *  hunting at midnight, zoomies at dawn, napping through the          *
+   *  morning, sunbathing at noon, loafing all afternoon, playing at     *
+   *  dusk, grooming in the evening, dozing before the hunt resumes.     *
+   *                                                                     *
+   *  Everything here is decoration: without this file the site is       *
+   *  fully readable, and every effect respects prefers-reduced-motion.  *
    * ------------------------------------------------------------------ */
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -30,140 +36,832 @@
         /* private browsing — suzu forgets, gracefully */
       }
     },
+    getRaw(key) {
+      try {
+        return window.localStorage.getItem(key);
+      } catch {
+        return null;
+      }
+    },
   };
 
   const rand = (min, max) => min + Math.random() * (max - min);
   const pick = (list) => list[Math.floor(Math.random() * list.length)];
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const hhmm = (date = new Date()) =>
+    `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
 
   /* ------------------------------------------------------------------ *
-   *  Suzu, the terminal familiar                                        *
+   *  Suzu's day — a crepuscular predator's schedule, by local hour.     *
+   *  `to` is exclusive; hour 24 wraps to 0.                             *
    * ------------------------------------------------------------------ */
 
   const FACE = {
-    asleep: "( -.- )",
-    awake: "( o.o )",
-    blink: "( -,- )",
-    happy: "( ^.^ )",
-    love: "( ^w^ )",
-    shock: "( O.O )",
+    asleep: "-.-",
+    dozing: "-.o",
+    asleep2: "=.=",
+    awake: "o.o",
+    wide: "0.0",
+    hunting: "@.@",
+    blink: "-.-",
+    happy: "^.^",
+    love: "^w^",
+    shock: "O.O",
+    drowsy: "o.-",
+    slit: ">.<",
   };
 
-  const petLines = [
-    "purrs. the terminal warms up.",
-    "blinks slowly at you.",
-    "tucks a paw over the cursor.",
-    "headbutts your hand. rude, but affectionate.",
+  const SCHEDULE = [
+    {
+      name: "hunting",
+      from: 0,
+      to: 5,
+      asleep: false,
+      tail: 420,
+      blinkEvery: [3200, 6500],
+      noteEvery: [7000, 14000],
+      notes: ["!", "?", "!"],
+      faces: [FACE.hunting, FACE.wide, FACE.awake],
+      status: [
+        "hunting at {t} — peak predator hours",
+        "prowling the dark between keys",
+        "tracking something only she can see",
+        "a shadow moves. suzu moves faster.",
+        "ears flat, pupils wide. the hunt is on.",
+        "somewhere a cursor blinks. suzu hunts it.",
+        "silence. then: the pounce.",
+        "the midnight shift is hers alone.",
+        "she has not blinked in four minutes.",
+      ],
+      arrives: [
+        "the clock hits midnight. suzu's eyes go wide.",
+        "hunting hours. she slips off the windowsill.",
+      ],
+      talk: [
+        "suzu: quiet. something moved under the desk.",
+        "suzu: the hunt is on. whisper.",
+        "suzu: at this hour the terminal belongs to me.",
+        "suzu: i hunt the thing that eats your commits.",
+        "suzu: shh. i'm tracking it. ... it's gone.",
+        "suzu: this is my favorite hour. it's dark and everything is mine.",
+      ],
+      sleepyReplies: [],
+    },
+    {
+      name: "zoomies",
+      from: 5,
+      to: 8,
+      asleep: false,
+      tail: 260,
+      blinkEvery: [2400, 5200],
+      noteEvery: [5000, 9000],
+      notes: ["♪", "!", "♪", "♪"],
+      faces: [FACE.awake, FACE.happy, FACE.wide],
+      status: [
+        "DAWN ZOOMIES. hold on to something.",
+        "three laps around the desk at {t}",
+        "suzu has left her body. she is speed.",
+        "the {t} hour belongs to chaos",
+        "zooming past the project cards",
+        "frantic, joyful, unstoppable",
+        "sprint. skid. sprint. skid. repeat.",
+      ],
+      arrives: [
+        "dawn breaks. so does suzu's impulse control.",
+        "zoomies detected. secure the cables.",
+      ],
+      talk: [
+        "suzu: THE SUN IS COMING. DID YOU SEE IT. DID YOU.",
+        "suzu: no time to explain. time to run.",
+        "suzu: i ran four laps. i remember none of them.",
+        "suzu: zoomies first. questions never.",
+        "suzu: my tail started it. i just followed.",
+        "suzu: it is five in the morning and i am thriving.",
+      ],
+      sleepyReplies: [],
+    },
+    {
+      name: "napping",
+      from: 8,
+      to: 12,
+      asleep: true,
+      tail: 1400,
+      blinkEvery: [9000, 16000],
+      noteEvery: [6000, 11000],
+      notes: ["z", "z", "z"],
+      faces: [FACE.asleep, FACE.asleep2, FACE.asleep],
+      status: [
+        "asleep at {t} — morning nap",
+        "sleeping off the dawn shift",
+        "the bed is warm, the world is loud",
+        "dreaming of an infinite box",
+        "do not disturb. this means you.",
+        "paws twitching. chasing something fast.",
+        "a nap earned by the zoomies of dawn",
+      ],
+      arrives: [
+        "the dawn shift ends. suzu crashes, mid-stride almost.",
+        "morning nap taken. dignity optional.",
+      ],
+      talk: [
+        "suzu: ...zzz... (she dreams of a box with no lid)",
+        "suzu: mrr... (a paw twitches toward some distant prey)",
+        "suzu: (she sleeps like the compiled: fully, and with trust)",
+        "suzu: ...zzz... the dream mouse is faster this time",
+      ],
+      sleepyReplies: [
+        "suzu: ...zzz... (she dreams of a box with no lid)",
+        "suzu: mrr... (a paw twitches toward some distant prey)",
+        "suzu: (she sleeps like the compiled: fully, and with trust)",
+        "suzu: ...zzz... the dream mouse is faster this time",
+      ],
+    },
+    {
+      name: "sunbathing",
+      from: 12,
+      to: 14,
+      asleep: true,
+      tail: 1700,
+      blinkEvery: [11000, 18000],
+      noteEvery: [9000, 15000],
+      notes: ["z", "z"],
+      faces: [FACE.asleep, FACE.dozing, FACE.asleep],
+      status: [
+        "sunbathing at {t} — warmth acquired",
+        "recharging in the light patch",
+        "half-asleep, fully comfortable",
+        "the sun is her heat lamp",
+        "a purr, slowly, on loop",
+        "the patch of light moved. she moved with it.",
+      ],
+      arrives: [
+        "the light patch found the windowsill. so did suzu.",
+        "sunbathing mode. the window glows warmer.",
+      ],
+      talk: [
+        "suzu: (she stretches one paw toward the sun, sighs, keeps it there)",
+        "suzu: mrrp. (translation: the warm spot is occupied. by me.)",
+        "suzu: (toast mode. do not adjust.)",
+      ],
+      sleepyReplies: [
+        "suzu: (she stretches one paw toward the sun, sighs, keeps it there)",
+        "suzu: mrrp. (translation: the warm spot is occupied. by me.)",
+        "suzu: (toast mode. do not adjust.)",
+      ],
+    },
+    {
+      name: "loafing",
+      from: 14,
+      to: 17,
+      asleep: false,
+      tail: 900,
+      blinkEvery: [4200, 8200],
+      noteEvery: [11000, 19000],
+      notes: ["♪", "·", "♪"],
+      faces: [FACE.drowsy, FACE.dozing, FACE.asleep2, FACE.drowsy],
+      status: [
+        "loafing. fully bread-shaped.",
+        "watching you with half-closed eyes",
+        "drowsy supervision in progress",
+        "she is loaf. the loaf is her.",
+        "slow blink. that means trust.",
+        "budgeting energy for the dusk shift",
+        "the loaf endures at {t}",
+      ],
+      arrives: [
+        "suzu folds herself into a loaf. afternoon begins.",
+        "energy saved for dusk. loaf mode engaged.",
+      ],
+      talk: [
+        "suzu: i am loaf. this is the whole message.",
+        "suzu: (she watches the cursor. the cursor watches back.)",
+        "suzu: ask again after my dusk nap. and my pre-dusk nap.",
+        "suzu: (slow blink. you may interpret this as affection.)",
+        "suzu: i'd pounce, but the loaf is at a critical stage.",
+      ],
+      sleepyReplies: [],
+    },
+    {
+      name: "playing",
+      from: 17,
+      to: 21,
+      asleep: false,
+      tail: 340,
+      blinkEvery: [2800, 6000],
+      noteEvery: [5500, 10000],
+      notes: ["♪", "!", "♪", "✦"],
+      faces: [FACE.awake, FACE.happy, FACE.wide],
+      status: [
+        "playing at {t} — the dusk shift",
+        "a bottle cap is the finest toy",
+        "bouncing after dust motes",
+        "the evening game is on. bring the feather.",
+        "pouncing at nothing, victoriously",
+        "primed for mischief at {t}",
+        "she has selected you as entertainment.",
+      ],
+      arrives: [
+        "dusk. suzu's second wind arrives like a small storm.",
+        "evening shift begins. the feather is requested.",
+      ],
+      talk: [
+        "suzu: play with me. that is an order and also a plea.",
+        "suzu: the bottle cap is under the fridge. this is a tragedy.",
+        "suzu: i caught the dust mote. i am undefeated.",
+        "suzu: (her butt wiggles. this is the pre-pounce warning.)",
+        "suzu: dusk is for games. dawn is for zoomies. night is for the hunt. noon is for toast.",
+      ],
+      sleepyReplies: [],
+    },
+    {
+      name: "grooming",
+      from: 21,
+      to: 23,
+      asleep: false,
+      tail: 760,
+      blinkEvery: [4600, 9000],
+      noteEvery: [12000, 20000],
+      notes: ["♪", "·"],
+      faces: [FACE.happy, FACE.asleep2, FACE.happy],
+      status: [
+        "grooming — evening maintenance",
+        "washing behind the ears",
+        "reorganizing the fluff",
+        "paw lick. paw lick. whisker check.",
+        "winding down for the night shift",
+        "presentable for the midnight hunt",
+      ],
+      arrives: [
+        "the evening bath begins. dignity restored.",
+        "grooming hour. every whisker accounted for.",
+      ],
+      talk: [
+        "suzu: (one more patch of fluff, then the world may resume)",
+        "suzu: grooming is self-care and also armor.",
+        "suzu: tonight's hunt requires shine. standby.",
+        "suzu: (she pauses mid-lick to judge you, then continues.)",
+      ],
+      sleepyReplies: [],
+    },
+    {
+      name: "dozing",
+      from: 23,
+      to: 24,
+      asleep: true,
+      tail: 1500,
+      blinkEvery: [10000, 17000],
+      noteEvery: [8000, 13000],
+      notes: ["z", "z"],
+      faces: [FACE.dozing, FACE.asleep, FACE.dozing],
+      status: [
+        "dozing off at {t}",
+        "eyes heavy. the keyboard is warm.",
+        "drifting... drifting...",
+        "the night hunt can wait an hour",
+        "pre-hunt hibernation. a known tactic.",
+      ],
+      arrives: [
+        "suzu's eyes narrow. the pre-hunt doze takes her.",
+        "dozing. the midnight shift will wake her on its own.",
+      ],
+      talk: [
+        "suzu: ...one more minute. then the hunt. (she will not get up.)",
+        "suzu: zz. (translation: the prey will still be there at midnight.)",
+      ],
+      sleepyReplies: [
+        "suzu: ...one more minute. then the hunt. (she will not get up.)",
+        "suzu: zz. (translation: the prey will still be there at midnight.)",
+      ],
+    },
   ];
 
-  const petMessage = (count) => {
-    if (count === 10) return "suzu has claimed you as staff. ♡";
-    if (count === 25) return "suzu considers you family now.";
-    if (count === 50) return `suzu has been petted ${count} times. legendary.`;
-    if (count > 4) return `purrs ×${count}. suzu approves of you.`;
-    return petLines[(count - 1) % petLines.length];
+  const stateFor = (date = new Date()) => {
+    const hour = date.getHours();
+    return SCHEDULE.find((slot) => hour >= slot.from && hour < slot.to) || SCHEDULE[0];
+  };
+  const stateByName = (name) => SCHEDULE.find((slot) => slot.name === name) || null;
+
+  /* ------------------------------------------------------------------ *
+   *  Art control                                                        *
+   * ------------------------------------------------------------------ */
+
+  const art = {
+    face: $("#suzu-face"),
+    zz: $("#suzu-zz"),
+    tail: $("#suzu-tail"),
+    window: $(".mascot-window"),
+    status: $("#suzu-status"),
+    body: $(".window-body"),
+    moon: $("#hero-moon"),
   };
 
-  const suzu = {
-    face: $("#suzu-face"),
-    status: $("#suzu-status"),
-    window: $(".mascot-window"),
-    awake: false,
-    petting: false,
-    petTimer: 0,
-    pets: store.get("suzu-pets"),
+  const footerFace = $("#footer-face");
+
+  let current = stateFor();
+  let overrideFace = null; // {face, until}
+  let petting = false;
+  let consoleAPI = null;
+  let tailToken = 0;
+
+  const setStatus = (text) => {
+    if (art.status) art.status.textContent = text;
+  };
+
+  const statusFromPool = (state, pool) => {
+    const text = pick(pool.length > 0 ? pool : state.status);
+    return text.replace("{t}", hhmm());
   };
 
   const setFace = (face) => {
-    if (suzu.face) suzu.face.textContent = face;
+    if (art.face) art.face.textContent = `(${face})`;
   };
 
-  const setStatus = (text) => {
-    if (suzu.status) suzu.status.textContent = text;
-  };
-
-  const wake = () => {
-    if (suzu.awake) return;
-    suzu.awake = true;
-    setFace(FACE.awake);
-    setStatus("suzu is listening.");
-  };
-
-  const sleep = () => {
-    suzu.awake = false;
-    suzu.petting = false;
-    setFace(FACE.asleep);
-    setStatus("asleep at 02:14");
+  const renderFace = () => {
+    if (!art.face) return;
+    if (overrideFace && Date.now() < overrideFace.until) {
+      setFace(overrideFace.face);
+      return;
+    }
+    overrideFace = null;
+    setFace(pick(current.faces));
   };
 
   const celebrate = (face, ms) => {
-    suzu.petting = true;
+    overrideFace = { face, until: Date.now() + ms };
     setFace(face);
-    window.clearTimeout(suzu.petTimer);
-    suzu.petTimer = window.setTimeout(() => {
-      suzu.petting = false;
-      setFace(suzu.awake ? FACE.awake : FACE.asleep);
-    }, ms);
   };
 
   const sparkles = () => {
-    if (!suzu.window) return;
-    suzu.window.classList.remove("is-petted");
-    void suzu.window.offsetWidth;
-    suzu.window.classList.add("is-petted");
+    if (!art.window) return;
+    art.window.classList.remove("is-petted");
+    void art.window.offsetWidth;
+    art.window.classList.add("is-petted");
   };
 
+  /* ------------------------------------------------------------------ *
+   *  Particles — zzz, hearts, notes, fish, laser, box                   *
+   * ------------------------------------------------------------------ */
+
+  const spawnNote = (glyph, cls) => {
+    if (!art.body || !motionOK()) return;
+    const note = document.createElement("span");
+    note.className = `float-note ${cls || ""}`;
+    note.textContent = glyph;
+    note.style.left = `${rand(38, 52).toFixed(1)}%`;
+    note.style.top = `${rand(26, 38).toFixed(1)}%`;
+    art.body.append(note);
+    note.addEventListener("animationend", () => note.remove());
+  };
+
+  const burstHearts = (count = 3) => {
+    for (let i = 0; i < count; i += 1) {
+      window.setTimeout(() => spawnNote("♡", "tint-heart"), i * 220);
+    }
+  };
+
+  const spawnFish = () => {
+    if (!art.body || !motionOK()) return;
+    const fish = document.createElement("span");
+    fish.className = "fish";
+    fish.textContent = "><(((º>";
+    fish.style.top = `${rand(38, 50).toFixed(1)}%`;
+    art.body.append(fish);
+    fish.addEventListener("animationend", () => fish.remove());
+  };
+
+  const spawnLaser = () => {
+    if (!art.body || !motionOK()) return;
+    const dot = document.createElement("span");
+    dot.className = "laser-dot";
+    art.body.append(dot);
+    dot.addEventListener("animationend", () => dot.remove());
+  };
+
+  const spawnBox = () => {
+    if (!art.body || !motionOK()) return;
+    const box = document.createElement("span");
+    box.className = "box-particle";
+    art.body.append(box);
+    box.addEventListener("animationend", () => box.remove());
+  };
+
+  const footerNotes = () => {
+    const holder = $(".footer-art");
+    if (!holder || !motionOK()) return;
+    const note = document.createElement("span");
+    note.className = "float-note footer-z";
+    note.textContent = "z";
+    note.style.left = `${rand(46, 60).toFixed(1)}%`;
+    note.style.top = `${rand(34, 46).toFixed(1)}%`;
+    holder.append(note);
+    note.addEventListener("animationend", () => note.remove());
+  };
+
+  /* ------------------------------------------------------------------ *
+   *  Mood, relationship, memory — the tamagotchi ledger                 *
+   * ------------------------------------------------------------------ */
+
+  const REL_LEVELS = [
+    { min: 0, name: "stranger", line: "suzu is still deciding about you" },
+    { min: 5, name: "acquaintance", line: "suzu tolerates you. affectionately." },
+    { min: 20, name: "friend", line: "suzu considers you a friend" },
+    { min: 50, name: "best friend", line: "suzu considers you family" },
+    { min: 100, name: "staff", line: "you are staff. suzu is management." },
+  ];
+
+  const ledger = {
+    pets: store.get("suzu-pets"),
+    mood: store.get("suzu-mood", 40),
+    visits: store.get("suzu-visits", 0),
+    firstSeen: store.get("suzu-first-seen"),
+    rel() {
+      let level = REL_LEVELS[0];
+      for (const entry of REL_LEVELS) if (ledger.pets >= entry.min) level = entry;
+      return level;
+    },
+    saveMood() {
+      store.set("suzu-mood", Math.round(ledger.mood));
+      store.set("suzu-mood-time", Date.now());
+    },
+    addMood(amount) {
+      ledger.mood = clamp(ledger.mood + amount, 0, 100);
+      ledger.saveMood();
+    },
+  };
+
+  const initLedger = () => {
+    const now = Date.now();
+    const today = new Date().toDateString();
+
+    if (!ledger.firstSeen) {
+      ledger.firstSeen = now;
+      store.set("suzu-first-seen", now);
+      ledger.visits = 1;
+      store.set("suzu-visits", 1);
+      ledger.mood = 40;
+      ledger.saveMood();
+      store.set("suzu-last-visit", today);
+      return { firstEver: true };
+    }
+
+    /* Mood decays 5 points per hour since the last save, floor 15. */
+    const lastTime = store.get("suzu-mood-time", now);
+    const hours = Math.max(0, (now - lastTime) / 3600000);
+    ledger.mood = clamp(ledger.mood - hours * 5, ledger.pets > 0 ? 15 : 5, 100);
+
+    const lastVisit = store.getRaw("suzu-last-visit");
+    let returning = false;
+    if (lastVisit !== today) {
+      ledger.visits += 1;
+      store.set("suzu-visits", ledger.visits);
+      store.set("suzu-last-visit", today);
+      ledger.addMood(8); /* welcome back */
+      returning = true;
+    }
+    ledger.saveMood();
+    return { firstEver: false, returning };
+  };
+
+  const daysKnown = () =>
+    Math.max(1, Math.ceil((Date.now() - ledger.firstSeen) / 86400000));
+
+  const moodBar = () => {
+    const filled = Math.round(ledger.mood / 10);
+    return `[${"♥".repeat(filled)}${"·".repeat(10 - filled)}]`;
+  };
+
+  const petMilestone = () => {
+    const n = ledger.pets;
+    if (n === 1) return "purrs. the terminal warms up.";
+    if (n === 10) return "has claimed you as staff. ♡";
+    if (n === 25) return "considers you family now.";
+    if (n === 50) return `has been petted ${n} times. legendary.`;
+    if (n === 100) return "grants you the title of co-owner. there is no co-owner.";
+    if (n % 100 === 0 && n > 0) return `— ${n} pets. a bond beyond counting.`;
+    if (n > 4) return `purrs ×${n}.`;
+    return pick([
+      "blinks slowly at you.",
+      "tucks a paw over the cursor.",
+      "headbutts your hand. rude, but affectionate.",
+      "flops over. full trust.",
+    ]);
+  };
+
+  /* ------------------------------------------------------------------ *
+   *  Petting, waking, state changes                                     *
+   * ------------------------------------------------------------------ */
+
   const pet = (fromConsole = false) => {
-    suzu.pets += 1;
-    store.set("suzu-pets", suzu.pets);
-    wake();
-    const message = petMessage(suzu.pets);
+    const asleep = current.asleep;
+    ledger.pets += 1;
+    store.set("suzu-pets", ledger.pets);
+    ledger.addMood(asleep ? 3 : 6);
+
+    const message = asleep
+      ? pick([
+          "sleepily leans into your hand. don't stop.",
+          "purrs without waking. muscle memory.",
+          "mrr. (the dream-you is also petting her.)",
+          "accepts pets from within the dream.",
+        ])
+      : petMilestone();
+
     setStatus(`suzu ${message}`);
-    celebrate(FACE.happy, 2400);
+    if (asleep) {
+      celebrate(FACE.dozing, 1600);
+    } else {
+      celebrate(ledger.mood > 85 ? FACE.love : FACE.happy, 2400);
+    }
     sparkles();
+    if (motionOK()) burstHearts(asleep ? 1 : 3);
     if (fromConsole && consoleAPI) consoleAPI.note(`suzu ${message}`);
+  };
+
+  const wakeUp = (reason) => {
+    if (!current.asleep) return false;
+    celebrate(FACE.shock, 1400);
+    sparkles();
+    if (reason === "laser") {
+      setStatus("THE DOT. SUZU IS AWAKE. THE DOT.");
+      if (consoleAPI) consoleAPI.note("suzu: THE DOT.");
+    } else {
+      setStatus("suzu wakes. judges you. forgives you. mostly.");
+      if (consoleAPI) consoleAPI.note("suzu wakes. judges you. forgives you. mostly.");
+    }
+    window.setTimeout(renderFace, 1500);
+    return true;
+  };
+
+  const applyState = (state, announce = false) => {
+    current = state;
+    tailToken += 1;
+    overrideFace = null;
+    petting = false;
+
+    if (art.zz) {
+      art.zz.textContent = state.asleep ? (state.name === "sunbathing" ? "zZ." : "zzZ") : "   ";
+    }
+    if (art.window) {
+      art.window.classList.toggle("is-sunbathing", state.name === "sunbathing");
+      art.window.classList.toggle("is-breathing", state.asleep);
+    }
+    if (footerFace) footerFace.textContent = " -.- ";
+    renderFace();
+    setStatus(statusFromPool(state, state.status));
+
+    if (announce && consoleAPI) {
+      consoleAPI.note(pick(state.arrives));
+      if (state.asleep && motionOK()) {
+        for (let i = 0; i < 3; i += 1) window.setTimeout(() => spawnNote("z", ""), i * 300);
+      }
+    }
+    startTail();
+  };
+
+  const checkSchedule = () => {
+    const next = stateFor();
+    if (next.name !== current.name) applyState(next, true);
+  };
+
+  /* ------------------------------------------------------------------ *
+   *  Loops: tail, blinking, idle particles, the minute hand             *
+   * ------------------------------------------------------------------ */
+
+  const TAIL_FRAMES = ["~~~▌", "~~▌~", "~▌~~", "▌~~~", "~▌~~", "~~▌~"];
+  const startTail = () => {
+    const token = tailToken;
+    let index = 0;
+    const step = () => {
+      if (token !== tailToken || !art.tail) return;
+      index = (index + 1) % TAIL_FRAMES.length;
+      art.tail.textContent = TAIL_FRAMES[index];
+      window.setTimeout(step, current.tail);
+    };
+    window.setTimeout(step, current.tail);
+  };
+
+  const startBlinking = () => {
+    const step = () => {
+      const [minDelay, maxDelay] = current.blinkEvery;
+      if (!document.hidden && !overrideFace) {
+        if (current.asleep) {
+          renderFace(); /* sleep faces drift */
+        } else {
+          setFace(FACE.blink);
+          window.setTimeout(() => {
+            if (!overrideFace) renderFace();
+          }, 170);
+        }
+      }
+      window.setTimeout(step, rand(minDelay, maxDelay));
+    };
+    window.setTimeout(step, rand(2200, 5000));
+  };
+
+  const startIdleNotes = () => {
+    const step = () => {
+      const [minDelay, maxDelay] = current.noteEvery;
+      if (!document.hidden) {
+        const glyph = pick(current.notes);
+        const cls =
+          glyph === "!" ? "tint-gold" : glyph === "♪" ? "tint-mint" : glyph === "♡" ? "tint-heart" : "";
+        spawnNote(glyph, cls);
+        if (!current.asleep && Math.random() < 0.12) burstHearts(1);
+      }
+      window.setTimeout(step, rand(minDelay, maxDelay));
+    };
+    window.setTimeout(step, rand(3000, 6000));
+  };
+
+  /* ------------------------------------------------------------------ *
+   *  Suzu's console — a real little terminal with a cat in it           *
+   * ------------------------------------------------------------------ */
+
+  const files = {
+    koda: "an IDE that arrives already knowing the language. rust, built-in lsp, zero config.",
+    kitten: "a small language learning to compile itself. go + c; the tool is purr, the files are .ktn.",
+    vynl: "a dj booth in your terminal. fft spectrum, vinyl mode, gapless playback. no browser required.",
+    grimmoire: "an ascii-first rpg in a village that survived by feeding the water. rust, all glyphs.",
+    suzu: "your terminal familiar. keeps predator hours. likes: boxes, the moon, and you (probably).",
+    "~/.why":
+      "to understand the machine\nfrom the inside out.\nthen make it a little kinder.",
+  };
+
+  const targets = {
+    koda: "#koda",
+    kitten: "#kitten",
+    vynl: "#vynl",
+    grimmoire: "#grimmoire",
+    about: "#about",
+    projects: "#projects",
+    interests: "#interests",
+    notes: "#notes",
+    top: "#top",
+    home: "#top",
+  };
+
+  const ASK_ANSWERS = [
+    "suzu: the signs say yes. the whiskers say ask again after dinner.",
+    "suzu: absolutely. (she is not listening.)",
+    "suzu: no. but do it anyway.",
+    "suzu: the answer is a box. the answer is always a box.",
+    "suzu: 42, but for cats.",
+    "suzu: my tail says yes. my tail says many things.",
+    "suzu: ask the moon. she answers at 02:14.",
+    "suzu: unlikely, but the zoomies disagree.",
+    "suzu: yes, if you believe. also if you feed me.",
+    "suzu: the compiler is always right. wait. that's the spec. both are right.",
+    "suzu: it depends whether it's before or after my nap.",
+    "suzu: i have seen the future. there is a warm keyboard in it.",
+  ];
+
+  const TOPICS = [
+    {
+      match: /\b(love|like you|cute|pretty|beautiful|good cat|best cat)\b/,
+      lines: [
+        "suzu: (she shows her belly. it is a trap. it is also love.)",
+        "suzu: i know. the moon told me first.",
+        "suzu: (headbutt. that's the highest honor available.)",
+        "suzu: love is stored in the purr.",
+      ],
+    },
+    {
+      match: /\b(hungry|food|eat|treat|fish|snack|dinner|breakfast)\b/,
+      lines: [
+        "suzu: the bowl is 41% full. this is a famine.",
+        "suzu: i ate at 06:00. that was another lifetime.",
+        "suzu: feed the cat, feed the compiler. it's the same machine.",
+        "suzu: (she leads you to the bowl even though she just ate.)",
+        "suzu: i would trade three of your passwords for one shrimp.",
+      ],
+    },
+    {
+      match: /\b(night|dark|midnight|moon|star|sleep|insomnia)\b/,
+      lines: [
+        "suzu: the dark hours are the honest hours.",
+        "suzu: the moon and i have an arrangement. she shines, i guard.",
+        "suzu: midnight is when the ideas hunt you. i protect the good ones.",
+        "suzu: every 02:14 is the same 02:14. that's the secret.",
+      ],
+    },
+    {
+      match: /\b(code|bug|compile|compiler|rust|golang|go\b|program|debug|type check)\b/,
+      lines: [
+        "suzu: a bug is just a feature that hasn't been fed.",
+        "suzu: the type checker and i both reject things we don't understand.",
+        "suzu: rustc is the only authority i respect.",
+        "suzu: have you tried turning the specification off and on again.",
+        "suzu: i sat on the keyboard once. it compiled. i have been proud since.",
+      ],
+    },
+    {
+      match: /\b(koda|kitten|vynl|grimmoire)\b/,
+      lines: [
+        "suzu: koda? the polite one. opens doors for languages.",
+        "suzu: kitten compiles itself. i supervise. mostly i sit on the spec.",
+        "suzu: vynl goes brrr correctly. 1024-point fft. i checked.",
+        "suzu: grimmoire is the dark forest story. i am technically in it. as a shadow.",
+        "suzu: four worlds and i live in the best one. the windowsill.",
+      ],
+    },
+    {
+      match: /\b(tired|exhausted|burn|rest|coffee)\b/,
+      lines: [
+        "suzu: nap. that's the whole advice. nap like the dawn shift never happened.",
+        "suzu: cats sleep 16 hours a day and ship 4 projects. correlation.",
+        "suzu: coffee is just bean tea that yells at you.",
+        "suzu: rest is also part of the system. interface and engineering.",
+      ],
+    },
+    {
+      match: /\b(box|boxes|carton)\b/,
+      lines: [
+        "suzu: if it fits, i sits. this is law.",
+        "suzu: a box is a room you can own in one jump.",
+        "suzu: (her eyes go wide at the word alone.)",
+      ],
+    },
+    {
+      match: /\b(bird|birb|pigeon|sparrow)\b/,
+      lines: [
+        "suzu: ek-ek-ek-ek. (that's bird chatter. it means she cares.)",
+        "suzu: one day the glass will not be there. one day.",
+        "suzu: the birds know what they did.",
+      ],
+    },
+    {
+      match: /\b(music|song|dj|vynl|bpm|mix)\b/,
+      lines: [
+        "suzu: put on something at 126 bpm. my tail keeps the tempo.",
+        "suzu: the fft spectrum is my favorite lightning.",
+        "suzu: vinyl mode couples tempo and pitch. like a real turntable. like real prey.",
+      ],
+    },
+    {
+      match: /\b(who are you|your name|suzu)\b/,
+      lines: [
+        "suzu: suzu. terminal familiar. first of her name. keeper of the windowsill.",
+        "suzu: named after the sound a small bell makes. i am not small. i am compact.",
+        "suzu: i was compiled at midnight, like everything good.",
+      ],
+    },
+    {
+      match: /\b(bye|goodbye|see you|later|cya)\b/,
+      lines: [
+        "suzu: (she watches the door until you're gone, then grooms.)",
+        "suzu: return before midnight. the hunt is better with witnesses.",
+        "suzu: (slow blink. dismissed with love.)",
+      ],
+    },
+  ];
+
+  const GREETING = (state) => {
+    const hour = new Date().getHours();
+    const part =
+      hour < 5 ? "the hunt is on" : hour < 8 ? "the zoomies just ended" :
+      hour < 12 ? "you caught the nap. lucky." : hour < 14 ? "the sun is warm" :
+      hour < 17 ? "the loaf is in session" : hour < 21 ? "dusk. playtime." :
+      hour < 23 ? "grooming hour" : "almost midnight";
+    return pick([
+      `suzu: hello. ${part}.`,
+      `suzu: hi. ${part}, in case you wondered.`,
+      `suzu: mrrp. (${part}, naturally.)`,
+      `suzu: hello again. day ${daysKnown()} of knowing you.`,
+    ]);
   };
 
   const initSuzuBody = () => {
     const petButton = $("#pet-suzu");
-    const art = $("#suzu-art");
+    const artEl = $("#suzu-art");
 
     if (petButton) {
       petButton.hidden = false;
       petButton.addEventListener("click", () => pet());
     }
 
-    if (art) {
-      art.addEventListener("click", (event) => {
+    if (artEl) {
+      artEl.addEventListener("click", (event) => {
         if (event.target.closest("#hero-moon")) return;
         pet();
       });
     }
 
-    /* Suzu dozes off again if nobody is around. */
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden && !suzu.petting) sleep();
+      if (!document.hidden) checkSchedule();
     });
 
-    /* Occasional blinking while awake. */
-    if (motionOK() && suzu.face) {
-      const blink = () => {
-        if (suzu.awake && !suzu.petting && !document.hidden) {
-          setFace(FACE.blink);
-          window.setTimeout(() => {
-            if (!suzu.petting) setFace(suzu.awake ? FACE.awake : FACE.asleep);
-          }, 170);
-        }
-        window.setTimeout(blink, rand(3800, 8600));
-      };
-      window.setTimeout(blink, rand(2400, 5000));
+    window.setInterval(checkSchedule, 60000);
+
+    if (motionOK()) {
+      window.setInterval(() => {
+        if (!document.hidden && current.asleep) footerNotes();
+      }, 7000);
     }
   };
 
   /* ------------------------------------------------------------------ *
-   *  Suzu's console — a real little terminal in the hero                *
+   *  Console                                                            *
    * ------------------------------------------------------------------ */
-
-  let consoleAPI = null;
 
   const initConsole = () => {
     const box = $("#suzu-console");
@@ -174,58 +872,36 @@
 
     box.hidden = false;
 
-    const print = (text, cls = "c-out", asHTML = false) => {
+    const print = (text, cls = "c-out") => {
       const line = document.createElement("p");
       line.className = cls;
-      if (asHTML) {
-        line.innerHTML = text;
-      } else {
-        line.textContent = text;
-      }
+      line.textContent = text;
       out.append(line);
-      while (out.children.length > 60) out.firstElementChild.remove();
+      while (out.children.length > 90) out.firstElementChild.remove();
       out.scrollTop = out.scrollHeight;
     };
 
     const note = (text) => print(text, "c-ok");
-
-    const files = {
-      koda: "an IDE that arrives already knowing the language. rust, built-in lsp, zero config.",
-      kitten: "a small language learning to compile itself. go + c; the tool is purr, the files are .ktn.",
-      vynl: "a dj booth in your terminal. fft spectrum, vinyl mode, gapless playback. no browser required.",
-      grimmoire: "an ascii-first rpg in a village that survived by feeding the water. rust, all glyphs.",
-      suzu: "your terminal familiar. likes: pets, blinking cursors, and 02:14.",
-      "~/.why":
-        "to understand the machine\nfrom the inside out.\nthen make it a little kinder.",
-    };
-
-    const targets = {
-      koda: "#koda",
-      kitten: "#kitten",
-      vynl: "#vynl",
-      grimmoire: "#grimmoire",
-      about: "#about",
-      projects: "#projects",
-      interests: "#interests",
-      notes: "#notes",
-      top: "#top",
-      home: "#top",
-    };
 
     const goto = (name) => {
       const sel = targets[name];
       const el = sel ? $(sel) : null;
       if (!el) return `no such place: ${name}. try: ls`;
       el.scrollIntoView({ behavior: motionOK() ? "smooth" : "auto", block: "start" });
-      return `jumping to ${name} ✦`;
+      return pick([
+        `walking you to ${name}. try to keep up.`,
+        `jumping to ${name} ✦`,
+        `${name}. she headbutts the link on the way.`,
+      ]);
     };
 
-    const notFound = [
-      () => "command not found. suzu suggests: help",
-      (cmd) => `command not found: “${cmd}”. suzu stares at you blankly.`,
-      () => "suzu has never heard that one. help exists, though.",
-    ];
     let missCount = 0;
+
+    const asleepNote = () => {
+      if (current.asleep && Math.random() < 0.6) {
+        print("(suzu sleeps through your typing. the room answers.)", "c-dim");
+      }
+    };
 
     const commands = {
       help: () => {
@@ -237,42 +913,73 @@
           "  cat <name>  — read: koda, kitten, vynl, grimmoire, suzu, ~/.why",
           "  open <name> — jump to a project or section",
           "  pet         — pet suzu (or click the cat)",
-          "  meow        — say hi to suzu",
+          "  talk <...>  — actually talk to suzu. she has opinions.",
+          "  ask <...>   — ask suzu anything. answers are legally binding.",
+          "  feed        — a treat appears. suzu appears too.",
+          "  play        — dangle the feather",
+          "  groom       — request a grooming session",
+          "  laser       — you know exactly what this does",
+          "  mood        — suzu's mood, in a bar",
+          "  stats       — the tamagotchi ledger",
+          "  schedule    — suzu's day, hour by hour",
+          "  meow        — say hi in her language",
           "  moon        — make a wish",
+          "  stars       — a small shower",
           "  lights      — toggle the lamp",
+          "  date        — the time, cat-adjusted",
           "  clear       — clean the console",
-          "  exit        — let suzu sleep",
-        ].forEach((line) => print(line));
+          "  exit        — let suzu be",
+        ].forEach((lineText) => print(lineText));
         return null;
       },
       whoami: () =>
         "kiyra (etokiyra) — builds compilers, terminal tools & small worlds. this page is one of them.",
       whois: () => commands.whoami(),
-      ls: () => "koda/  kitten/  vynl/  grimmoire/  suzu  ~/.why",
-      pwd: () => "/home/kiyra/midnight",
+      ls: () => {
+        asleepNote();
+        return "koda/  kitten/  vynl/  grimmoire/  suzu  ~/.why";
+      },
+      pwd: () => {
+        asleepNote();
+        return "/home/kiyra/midnight";
+      },
       uname: () => "midnight/1.0 kiyra.lol tty/01 — quiet, dark, keyboard-first.",
       cat: (args) => {
         const name = (args[0] || "").toLowerCase();
         if (!name) return "cat what? try: cat koda";
         const file = files[name] || files[args.join(" ")];
         if (!file) return `no such file: ${name}. try: ls`;
+        asleepNote();
         print(file, "c-pink");
         return null;
       },
       open: (args) => goto((args[0] || "").toLowerCase()),
       goto: (args) => goto((args[0] || "").toLowerCase()),
       cd: (args) => goto((args[0] || "home").toLowerCase().replace(/[~/.]/g, "") || "home"),
+
+      /* --- suzu-specific --- */
       pet: () => {
         pet(true);
         return null;
       },
       meow: () => {
-        celebrate(pick([FACE.shock, FACE.happy]), 1600);
+        if (current.asleep) {
+          const woke = Math.random() < 0.4;
+          if (woke) {
+            wakeUp("meow");
+            return "one ear rotates. suzu surfaces: mrrp? YOU MEOWED?";
+          }
+          return "a paw twitches. the meow was absorbed by the nap.";
+        }
+        celebrate(pick([FACE.shock, FACE.happy, FACE.love]), 1600);
         return pick([
           "suzu: meow.",
           "suzu: meow. (translation: feed the compiler.)",
           "suzu: mrrp?",
           "suzu: meow meow. (translation: the build is fine, probably.)",
+          "suzu: meow. (translation: i understood none of that and agree completely.)",
+          "suzu: mrow. (translation: the windowsill is excellent today.)",
+          "suzu: ekek-ek. (that's not a meow. that's bird chatter. ignore it.)",
         ]);
       },
       purr: () => {
@@ -280,9 +987,170 @@
         celebrate(FACE.happy, 2000);
         return "suzu purrs. the window vibrates faintly. ♡";
       },
+      talk: (args) => {
+        const text = args.join(" ");
+        if (current.asleep) return pick(current.sleepyReplies);
+        if (!text) return pick(current.talk);
+        const topic = TOPICS.find((entry) => entry.match.test(text.toLowerCase()));
+        if (topic) {
+          ledger.addMood(2);
+          if (Math.random() < 0.35) burstHearts(1);
+          return pick(topic.lines);
+        }
+        return pick([
+          `suzu: "${text}". (she considers it. slowly.) ...valid.`,
+          `suzu: "${text}" — she blinks. that's a yes.`,
+          `suzu: interesting. tell me more at dusk. everything is better at dusk.`,
+          `suzu: (she files "${text}" under things the tall one says.)`,
+          `suzu: i've heard worse. i've also heard better. mostly worse.`,
+          `suzu: (she has no idea what that means, and commits anyway.)`,
+        ]);
+      },
+      chat: (args) => commands.talk(args),
+      say: (args) => commands.talk(args),
+      ask: (args) => {
+        if (current.asleep) return pick(current.sleepyReplies);
+        ledger.addMood(1);
+        return args.length === 0
+          ? "ask what? suzu answers everything. try: ask will the build pass"
+          : pick(ASK_ANSWERS);
+      },
+      feed: () => {
+        if (current.asleep) {
+          ledger.addMood(4);
+          celebrate(FACE.dozing, 1800);
+          return pick([
+            "suzu sleep-walks one paw to the treat. acceptable.",
+            "she eats with 10% of her brain. the rest stays asleep.",
+          ]);
+        }
+        ledger.addMood(8);
+        spawnFish();
+        celebrate(FACE.love, 2600);
+        burstHearts(2);
+        return pick([
+          "the treat travels across the desk. suzu travels faster.",
+          "suzu: (she is at the treat before the treat exists.)",
+          "a clean catch. mood improved.",
+        ]);
+      },
+      treat: () => commands.feed(),
+      play: () => {
+        if (current.asleep) {
+          ledger.addMood(2);
+          return "she swats once from inside the dream. counts double in dream points.";
+        }
+        ledger.addMood(10);
+        celebrate(FACE.wide, 1400);
+        sparkles();
+        window.setTimeout(() => celebrate(FACE.happy, 1800), 1500);
+        return pick([
+          "the feather dangles. the pounce lands. the feather escapes. classic.",
+          "suzu: (butt wiggle. pre-pounce. brace yourself.)",
+          "she catches the invisible. victory is declared.",
+        ]);
+      },
+      groom: () => {
+        if (current.asleep) return "grooming is scheduled after the nap. the nap is scheduled after the grooming.";
+        ledger.addMood(5);
+        celebrate(FACE.asleep2, 2200);
+        return pick([
+          "paw lick. paw lick. whisker check. passed.",
+          "suzu: (one more patch of fluff, then the world may resume.)",
+        ]);
+      },
+      laser: () => {
+        spawnLaser();
+        if (current.asleep) wakeUp("laser");
+        else celebrate(FACE.hunting, 2200);
+        window.setTimeout(() => {
+          setStatus("suzu pounces. the dot escapes. obviously.");
+          sparkles();
+          ledger.addMood(7);
+        }, 3200);
+        return "a red dot appears. physics becomes a suggestion.";
+      },
+      box: () => {
+        spawnBox();
+        ledger.addMood(4);
+        return pick([
+          "a box? WHERE. (it's the console. she is in it.)",
+          "suzu: if it fits, i sits. she fits. she sits.",
+          "the box is imaginary. the joy is real.",
+        ]);
+      },
+      cucumber: () => {
+        celebrate(FACE.shock, 2600);
+        sparkles();
+        ledger.addMood(-3);
+        return "suzu: DO NOT. bring that. here. (she is on the ceiling.)";
+      },
+      bird: () => {
+        if (current.asleep) return "even asleep, her ears rotate toward the word 'bird'.";
+        celebrate(FACE.hunting, 2000);
+        return "suzu: ek-ek-ek-ek. (the glass remains undefeated.)";
+      },
+      hunt: () => {
+        if (current.asleep) return "the hunt is tonight. the nap is now. priorities.";
+        celebrate(FACE.hunting, 2400);
+        return pick([
+          "suzu: the prey is a dust mote. the mote does not know.",
+          "suzu: i hunt for the honor. the honor is a warm keyboard.",
+        ]);
+      },
+      scratch: () =>
+        pick([
+          "suzu: the scratching post is a lie. the chair is truth.",
+          "suzu: that's MY couch. i'm the couch's cat.",
+        ]),
+      wake: () => {
+        if (!current.asleep) return "already up. the hunt never stops.";
+        if (Math.random() < 0.5) {
+          ledger.addMood(-2);
+          return "one eye opens. closes. suzu declines. try again in an hour.";
+        }
+        wakeUp("manual");
+        ledger.addMood(-1);
+        return null;
+      },
+      nap: () => {
+        if (current.asleep) return "she is already there. you're late.";
+        ledger.addMood(3);
+        celebrate(FACE.asleep, 2400);
+        return "suzu circles twice, folds, and is unconscious in four seconds.";
+      },
+      mood: () => {
+        const band =
+          ledger.mood >= 85 ? "purring at factory settings" :
+          ledger.mood >= 60 ? "content. suspiciously content." :
+          ledger.mood >= 35 ? "the aloof phase. it passes." :
+          "suzu looks at you the way cats judge.";
+        return `mood ${moodBar()} ${Math.round(ledger.mood)}% — ${band}`;
+      },
+      stats: () => {
+        const rel = ledger.rel();
+        [
+          `✦ suzu — day ${daysKnown()} of knowing you`,
+          `  pets: ${ledger.pets}   visits: ${ledger.visits}`,
+          `  mood: ${moodBar()} ${Math.round(ledger.mood)}%`,
+          `  bond: ${rel.name} — ${rel.line}`,
+          `  right now: ${current.name} (${current.asleep ? "asleep" : "awake"})`,
+        ].forEach((lineText) => print(lineText, "c-ok"));
+        return null;
+      },
+      schedule: () => {
+        SCHEDULE.forEach((slot) => {
+          const marker = slot === current ? "▸" : " ";
+          const line = `${marker} ${String(slot.from).padStart(2, "0")}:00–${String(slot.to % 24).padStart(2, "0")}:00  ${slot.name}${slot.asleep ? " (asleep)" : ""}`;
+          print(line, slot === current ? "c-ok" : "c-out");
+        });
+        print("crepuscular: peak hours at dawn and dusk.", "c-dim");
+        return null;
+      },
+      day: () => commands.schedule(),
       moon: () => {
         shootStar();
-        if (heroMoon) glowMoon();
+        if (art.moon) glowMoon();
         return "a shooting star crosses the hero. wish noted.";
       },
       stars: () => {
@@ -295,22 +1163,20 @@
           ? "the lamp hums on. warm corners, same midnight."
           : "lights off. back to midnight.";
       },
-      date: () => {
-        const now = new Date();
-        const hh = String(now.getHours()).padStart(2, "0");
-        const mm = String(now.getMinutes()).padStart(2, "0");
-        return `it is exactly ${hh}:${mm}. somewhere, it is always 02:14.`;
-      },
+      date: () => `it is exactly ${hhmm()}. suzu's schedule: ${current.name}.`,
       time: () => commands.date(),
       clear: () => {
         out.textContent = "";
         return null;
       },
-      hello: () => "suzu nods politely. type help for tricks.",
+      hello: () => (current.asleep ? pick(current.sleepyReplies) : GREETING(current)),
       hi: () => commands.hello(),
       hey: () => commands.hello(),
       yo: () => commands.hello(),
-      goodnight: () => "goodnight. the cursor keeps blinking.",
+      greetings: () => commands.hello(),
+      goodmorning: () => (current.asleep ? "suzu: (it is morning for you. it is naptime for her.)" : "suzu: morning. the zoomies were historic."),
+      goodnight: () => pick(["goodnight. the cursor keeps blinking.", "suzu: goodnight. i'll take it from here."]),
+      goodevening: () => "suzu: evening. the best shift.",
       coffee: () => "suzu doesn't brew. she naps next to the machine while it does.",
       sudo: () => "suzu does not accept root from strangers.",
       rm: () => "nice try. suzu guards this filesystem with her life.",
@@ -318,10 +1184,11 @@
       emacs: () => "suzu uses koda, obviously.",
       nano: () => "suzu uses koda, obviously.",
       man: () => "this console has exactly one page: help.",
+      name: () => "suzu. terminal familiar. first of her name. keeper of the windowsill.",
       exit: () => {
         window.setTimeout(() => input.blur(), 300);
-        sleep();
-        return "suzu curls back up. zzz.";
+        setStatus(statusFromPool(current, current.status));
+        return pick(["suzu curls back up. zzz.", "suzu: (dismissed, with a slow blink.)"]);
       },
       quit: () => commands.exit(),
       bye: () => commands.exit(),
@@ -337,7 +1204,12 @@
         const result = command(args);
         if (result) print(result, "c-out");
       } else {
-        print(notFound[missCount++ % notFound.length](name), "c-pink");
+        const misses = [
+          () => "command not found. suzu suggests: help",
+          (cmd) => `command not found: “${cmd}”. suzu stares at you blankly.`,
+          () => "suzu has never heard that one. help exists, though. or try: talk <anything>",
+        ];
+        print(misses[missCount++ % misses.length](name), "c-pink");
       }
     };
 
@@ -369,18 +1241,25 @@
     let blurTimer = 0;
     input.addEventListener("focus", () => {
       window.clearTimeout(blurTimer);
-      wake();
     });
     input.addEventListener("blur", () => {
       window.clearTimeout(blurTimer);
       blurTimer = window.setTimeout(() => {
-        if (!input.value.trim()) sleep();
+        if (!input.value.trim()) setStatus(statusFromPool(current, current.status));
       }, 5000);
     });
 
-    consoleAPI = { note };
+    consoleAPI = { note, print };
+    applyState(stateFor(), false);
 
-    print("✦ suzu console — type help and press enter", "c-ok");
+    const boot = initLedger();
+    if (boot.firstEver) {
+      print("✦ suzu has noticed you. (day 1)", "c-ok");
+      print("type help — or just talk to her.", "c-out");
+    } else if (boot.returning) {
+      print(`✦ suzu remembers you. day ${daysKnown()} of knowing you.`, "c-ok");
+    }
+    print(`✦ suzu console — type help and press enter`, "c-ok");
   };
 
   /* ------------------------------------------------------------------ *
@@ -392,11 +1271,11 @@
 
     const tickClock = () => {
       if (!clock) return;
-      const now = new Date();
-      const hh = String(now.getHours()).padStart(2, "0");
-      const mm = String(now.getMinutes()).padStart(2, "0");
-      const label = now.getHours() < 5 ? "midnight hours" : "online";
-      clock.textContent = `${hh}:${mm} · ${label}`;
+      const hour = new Date().getHours();
+      const label =
+        hour < 5 ? "midnight hours" : hour < 8 ? "dawn shift" : hour < 17 ? "online" :
+        hour < 21 ? "dusk shift" : "night hours";
+      clock.textContent = `${hhmm()} · ${label}`;
     };
 
     if (clock) {
@@ -465,12 +1344,10 @@
    *  Ambience: cursor glow, click sparks, shooting stars                *
    * ------------------------------------------------------------------ */
 
-  let heroMoon = null;
-
   const glowMoon = () => {
-    if (!heroMoon) return;
-    heroMoon.classList.add("is-glowing");
-    window.setTimeout(() => heroMoon.classList.remove("is-glowing"), 1500);
+    if (!art.moon) return;
+    art.moon.classList.add("is-glowing");
+    window.setTimeout(() => art.moon.classList.remove("is-glowing"), 1500);
   };
 
   const shootStar = () => {
@@ -486,24 +1363,18 @@
   };
 
   const initAmbience = () => {
-    heroMoon = $("#hero-moon");
-
-    if (heroMoon) {
-      heroMoon.addEventListener("click", (event) => {
+    if (art.moon) {
+      art.moon.addEventListener("click", (event) => {
         event.stopPropagation();
         glowMoon();
         shootStar();
-        wake();
-        setStatus("suzu watches the shooting star.");
-        window.setTimeout(() => {
-          if (!suzu.petting) setStatus(suzu.awake ? "suzu is listening." : "asleep at 02:14");
-        }, 3200);
+        setStatus(`suzu watches the shooting star. (${current.name} hours)`);
+        window.setTimeout(() => setStatus(statusFromPool(current, current.status)), 3200);
       });
     }
 
     if (!motionOK()) return;
 
-    /* Ambient shooting stars while the hero is on screen. */
     const hero = $(".hero");
     if (hero) {
       window.setTimeout(shootStar, 5200);
@@ -515,7 +1386,6 @@
       }, 26000);
     }
 
-    /* Soft glow that follows the cursor. */
     if (finePointer.matches) {
       const glow = document.createElement("div");
       glow.className = "cursor-glow";
@@ -562,7 +1432,6 @@
       });
     }
 
-    /* Tiny spark wherever you click. */
     document.addEventListener(
       "pointerdown",
       (event) => {
@@ -606,7 +1475,6 @@
       });
     }
 
-    /* The vynl spectrum dances while its terminal is on screen. */
     const specs = $$(".term-vynl .spec");
     const deck = $(".term-vynl");
     if (specs.length > 0 && deck && motionOK() && "IntersectionObserver" in window) {
@@ -642,7 +1510,7 @@
   };
 
   /* ------------------------------------------------------------------ *
-   *  Easter eggs: konami code, typing “meow” anywhere                   *
+   *  Easter eggs                                                        *
    * ------------------------------------------------------------------ */
 
   const starRain = () => {
@@ -696,15 +1564,14 @@
         if (progress === konami.length) {
           progress = 0;
           starRain();
-          wake();
           celebrate(FACE.love, 3200);
+          burstHearts(4);
           setStatus("the stars obey you. ✦");
           if (consoleAPI) consoleAPI.note("✦ konami accepted. the stars obey you.");
         }
       }
     });
 
-    /* Type “meow” anywhere on the page (outside the console). */
     let typed = "";
     document.addEventListener("keydown", (event) => {
       const target = event.target instanceof Element ? event.target : null;
@@ -713,12 +1580,11 @@
       typed = (typed + event.key.toLowerCase()).slice(-4);
       if (typed !== "meow") return;
       typed = "";
-      wake();
       celebrate(FACE.happy, 2000);
       sparkles();
-      setStatus("suzu heard that. meow.");
+      setStatus(current.asleep ? "suzu heard that. in her dream." : "suzu heard that. meow.");
       if (consoleAPI) {
-        consoleAPI.note("suzu heard that. meow.");
+        consoleAPI.note(current.asleep ? "suzu heard that. in her dream." : "suzu heard that. meow.");
       }
     });
   };
@@ -762,8 +1628,7 @@
 
     const updateActiveLink = () => {
       queued = false;
-      const headerHeight =
-        $(".site-header")?.getBoundingClientRect().height || 0;
+      const headerHeight = $(".site-header")?.getBoundingClientRect().height || 0;
       const threshold = headerHeight + 120;
       let activeSection = null;
 
@@ -809,4 +1674,18 @@
   initEggs();
   initTyping();
   initNav();
+  startBlinking();
+  startIdleNotes();
+
+  /* Hidden debug handle — only when the hash asks for it. */
+  if (window.location.hash === "#suzu-debug") {
+    window.__suzu = {
+      setState: (name) => {
+        const state = stateByName(name);
+        if (state) applyState(state, true);
+      },
+      state: () => current.name,
+      ledger: () => ({ ...ledger, rel: ledger.rel().name }),
+    };
+  }
 })();
