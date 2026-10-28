@@ -4,10 +4,10 @@
   /* ------------------------------------------------------------------ *
    *  kiyra.lol — suzu is a real cat, drawn from the reference sheet.    *
    *                                                                     *
-   *  Her art comes verbatim from the cat reference: the sitting cat is  *
-   *  her awake body, the sleeping cat is her asleep body, and her face  *
-   *  only ever swaps between the reference faces (o.o ^.^ O.O >.< -.-   *
-   *  *.*). The waving cat's raised paw greets you when she is happy.    *
+   *  Her art comes verbatim from the cat reference: one curled body —   *
+   *  the sleeping cat's — for every mood, and her face only ever swaps   *
+   *  between the reference faces (o.o ^.^ O.O >.< -.- *.*). The waving   *
+   *  cat's raised paw greets you when she is happy.                      *
    *                                                                     *
    *  She keeps a crepuscular predator's schedule on your local clock,   *
    *  nothing ever depletes — the good half of a tamagotchi, forever     *
@@ -69,10 +69,9 @@
     asleep: { face: " -.- ", mouth: " ^ " },
   };
 
-  /* The two reference bodies. Line 2 of each is padded so the floating
-     heart beside her never moves when she curls up. */
-  const SIT_FIGURE = "(  | |  )\n            \\_| |_/~            ";
-  const SLEEP_FIGURE = "(_______)~\n" + " ".repeat(32);
+  /* One body for every mood: the reference sleeping cat's curled body.
+     Awake or asleep, only her face changes — the heart beside her never
+     moves. */
 
   /* ------------------------------------------------------------------ *
    *  Suzu's day — a crepuscular predator's schedule, by local hour.     *
@@ -165,7 +164,7 @@
         "a nap earned by the zoomies of dawn",
       ],
       arrives: [
-        "the dawn shift ends. suzu curls into the sleeping pose.",
+        "the dawn shift ends. suzu settles down where she stands.",
         "morning nap taken. dignity optional.",
       ],
       talk: [
@@ -321,7 +320,7 @@
         "pre-hunt hibernation. a known tactic.",
       ],
       arrives: [
-        "suzu curls up where she stands. the pre-hunt doze takes her.",
+        "suzu settles where she stands. the pre-hunt doze takes her.",
         "dozing. the midnight shift will wake her on its own.",
       ],
       talk: [
@@ -350,7 +349,6 @@
     mouth: $("#suzu-mouth"),
     mouthRow: $("#suzu-mouth-row"),
     wave: $("#suzu-wave"),
-    figure: $("#suzu-figure"),
     zz: $("#suzu-zz"),
     scene: $("#suzu-art"),
     window: $(".mascot-window"),
@@ -632,8 +630,7 @@
     if (art.zz) {
       art.zz.textContent = state.asleep ? " zZz" : "    ";
     }
-    if (art.figure && state.asleep !== wasAsleep) {
-      art.figure.textContent = state.asleep ? SLEEP_FIGURE : SIT_FIGURE;
+    if (state.asleep !== wasAsleep) {
       morph();
     }
     if (art.mouthRow) {
