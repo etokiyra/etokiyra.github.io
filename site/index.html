@@ -8,18 +8,19 @@
   <meta name="author" content="kiyra">
   <meta name="theme-color" content="#080a12">
   <meta name="color-scheme" content="dark">
-  <link rel="canonical" href="https://etokiyra.github.io/">
+  <link rel="canonical" href="https://kiyra.lol/">
   <link rel="me" href="https://github.com/etokiyra">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="assets/css/style.css">
+  <script>document.documentElement.classList.add("js");</script>
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="kiyra">
-  <meta property="og:url" content="https://etokiyra.github.io/">
+  <meta property="og:url" content="https://kiyra.lol/">
   <meta property="og:title" content="kiyra — little worlds for the terminal">
   <meta property="og:description" content="Compilers, terminal tools, and small playable worlds. Some people decorate a room. I decorate a prompt.">
-  <meta property="og:image" content="https://etokiyra.github.io/assets/og.png">
+  <meta property="og:image" content="https://kiyra.lol/assets/og.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -27,7 +28,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="kiyra — little worlds for the terminal">
   <meta name="twitter:description" content="Compilers, terminal tools, and small playable worlds. Some people decorate a room. I decorate a prompt.">
-  <meta name="twitter:image" content="https://etokiyra.github.io/assets/og.png">
+  <meta name="twitter:image" content="https://kiyra.lol/assets/og.png">
   <meta name="twitter:image:alt" content="kiyra — little worlds for the terminal. An ASCII cat beside a crescent moon on a midnight background.">
 
   <script src="assets/js/site.js" defer></script>
@@ -53,8 +54,10 @@
         </ul>
       </nav>
 
-      <p class="header-status" aria-hidden="true"><span class="status-dot"></span> online</p>
+      <p class="header-status" aria-hidden="true"><span class="status-dot"></span><span id="header-clock">online</span></p>
     </div>
+
+    <div class="scroll-progress" aria-hidden="true"><span id="progress-bar"></span></div>
   </header>
 
   <main id="main">
@@ -78,7 +81,7 @@
 
       <div class="shell hero-grid">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="prompt">kiyra@midnight:~$</span> whoami<span class="cursor" aria-hidden="true">▌</span></p>
+          <p class="eyebrow"><span class="prompt">kiyra@midnight:~$</span> <span id="typed">whoami</span><span class="cursor" aria-hidden="true">▌</span></p>
 
           <h1 id="hero-title">
             <span class="h1-line">Some people</span>
@@ -116,9 +119,9 @@
               <span class="window-meta" aria-hidden="true">tty/01</span>
             </div>
             <div class="window-body">
-              <pre class="mascot-art" role="img" aria-label="Suzu, a small ASCII cat, sits on a terminal windowsill beneath a crescent moon and scattered stars.">
+              <pre class="mascot-art" id="suzu-art" title="pet suzu" role="img" aria-label="Suzu, a small ASCII cat, sits on a terminal windowsill beneath a crescent moon and scattered stars.">
 <span class="art-stars">        ✦                    ·</span>
-<span class="art-moon">                  ___
+<span class="art-moon" id="hero-moon">                  ___
                  /   \
                 |  ☾  |
    .             \___/</span>                 <span class="art-star">.</span>
@@ -140,6 +143,14 @@
                 <p class="mascot-status" id="suzu-status" role="status">asleep at 02:14</p>
                 <button class="pet-button" id="pet-suzu" type="button" hidden>pet suzu <span aria-hidden="true">♡</span></button>
               </div>
+              <div class="mascot-console" id="suzu-console" hidden>
+                <div class="console-out" id="console-out" role="log" aria-live="polite"></div>
+                <form class="console-form" id="console-form" autocomplete="off">
+                  <label class="sr-only" for="console-input">type a command for suzu</label>
+                  <span class="console-prompt" aria-hidden="true">❯</span>
+                  <input class="console-input" id="console-input" type="text" spellcheck="false" autocapitalize="none" autocomplete="off" placeholder="type help and press enter">
+                </form>
+              </div>
               <div class="pet-sparks" aria-hidden="true">
                 <span>✦</span><span>✧</span><span>·</span><span>✦</span>
               </div>
@@ -159,7 +170,7 @@
         </div>
 
         <div class="section-content about-grid">
-          <div class="prose">
+          <div class="prose reveal">
             <h2 id="about-title">I learn by making<br>the thing.</h2>
             <p>
               I'm less interested in collecting frameworks than in understanding the layer
@@ -183,7 +194,7 @@
             </blockquote>
           </div>
 
-          <aside class="why-note" aria-label="A note on why I build">
+          <aside class="why-note reveal" aria-label="A note on why I build">
             <div class="note-bar"><span aria-hidden="true">✦</span> ~/.why</div>
             <div class="note-body">
               <p><span class="prompt">$</span> cat ~/.why</p>
@@ -210,7 +221,7 @@
         </div>
 
         <div class="section-content">
-          <div class="section-intro">
+          <div class="section-intro reveal">
             <h2 id="projects-title">Four things I keep<br>building.</h2>
             <p>
               These are the repositories pinned on my GitHub. All of them are works in
@@ -220,7 +231,7 @@
           </div>
 
           <div class="project-list">
-            <article class="project" id="koda" aria-labelledby="koda-title">
+            <article class="project reveal" id="koda" aria-labelledby="koda-title">
               <div class="project-copy">
                 <div class="project-meta">
                   <span class="project-index">01</span>
@@ -274,7 +285,7 @@
               </div>
             </article>
 
-            <article class="project project-flip" id="kitten" aria-labelledby="kitten-title">
+            <article class="project project-flip reveal" id="kitten" aria-labelledby="kitten-title">
               <div class="project-copy">
                 <div class="project-meta">
                   <span class="project-index">02</span>
@@ -333,7 +344,7 @@
               </div>
             </article>
 
-            <article class="project" id="vynl" aria-labelledby="vynl-title">
+            <article class="project reveal" id="vynl" aria-labelledby="vynl-title">
               <div class="project-copy">
                 <div class="project-meta">
                   <span class="project-index">03</span>
@@ -380,14 +391,14 @@
      \    \  ░░░░░░  /    /
       '.   ╰────────╯   .'
         '-~~~~~~~~~~~~-'
-   <span class="term-mint">▂▄▆█▆▄▂</span>   <span class="term-mint">▂▄▆█▆▄▂</span>   <span class="term-mint">▂▄▆█▆▄▂</span>
+   <span class="term-mint spec">▂▄▆█▆▄▂</span>   <span class="term-mint spec">▂▄▆█▆▄▂</span>   <span class="term-mint spec">▂▄▆█▆▄▂</span>
    tempo 1.00×  pitch +0  vol 76</pre>
                 </div>
                 <p class="figcaption">A record, a spectrum, and a very small dance floor.</p>
               </div>
             </article>
 
-            <article class="project project-flip" id="grimmoire" aria-labelledby="grimmoire-title">
+            <article class="project project-flip reveal" id="grimmoire" aria-labelledby="grimmoire-title">
               <div class="project-copy">
                 <div class="project-meta">
                   <span class="project-index">04</span>
@@ -428,10 +439,10 @@
                   <div class="term-bar"><span class="term-title">grimmoire</span><span>ruined chapel</span></div>
                   <pre role="img" aria-label="A stylized sketch of an ASCII game scene: a wizard standing in a lit stone room with a candle and moonlight.">
    <span class="term-dim">░░░░░░░░░░░░░░░░░░░░░░░░░</span>
-   <span class="term-dim">░</span>   <span class="term-pink">▄▄</span>        <span class="term-dim">·</span>      <span class="term-pink">▄</span>   <span class="term-dim">░</span>
-   <span class="term-dim">░</span>  <span class="term-pink">████</span>     <span class="term-mint">@</span>       <span class="term-pink">██</span>   <span class="term-dim">░</span>
-   <span class="term-dim">░</span>   <span class="term-pink">██</span>     <span class="term-mint">/|\</span>   <span class="term-dim">░</span>  <span class="term-pink">██</span>   <span class="term-dim">░</span>
-   <span class="term-dim">░</span>          <span class="term-mint">/ \</span>  <span class="term-dim">░░░</span>      <span class="term-dim">░</span>
+   <span class="term-dim">░</span>   <span class="term-pink flicker">▄▄</span>        <span class="term-dim">·</span>      <span class="term-pink flicker">▄</span>   <span class="term-dim">░</span>
+   <span class="term-dim">░</span>  <span class="term-pink flicker">████</span>     <span class="term-mint mage">@</span>       <span class="term-pink flicker">██</span>   <span class="term-dim">░</span>
+   <span class="term-dim">░</span>   <span class="term-pink flicker">██</span>     <span class="term-mint mage">/|\</span>   <span class="term-dim">░</span>  <span class="term-pink flicker">██</span>   <span class="term-dim">░</span>
+   <span class="term-dim">░</span>          <span class="term-mint mage">/ \</span>  <span class="term-dim">░░░</span>      <span class="term-dim">░</span>
    <span class="term-dim">░░░░░░░░░░░░░░░░░░░░░░░░░</span>
      <span class="term-accent">the chapel remembers.</span></pre>
                 </div>
@@ -451,7 +462,7 @@
         </div>
 
         <div class="section-content">
-          <div class="section-intro">
+          <div class="section-intro reveal">
             <h2 id="interests-title">The layer underneath<br>the layer.</h2>
             <p>
               A compact map of the things I keep returning to. Not a skill meter — just the
@@ -459,8 +470,8 @@
             </p>
           </div>
 
-          <div class="interest-grid">
-            <article class="interest">
+          <div class="interest-grid" data-stagger>
+            <article class="interest reveal">
               <span class="interest-mark" aria-hidden="true">λ</span>
               <div>
                 <h3>compilers &amp; languages</h3>
@@ -468,7 +479,7 @@
               </div>
             </article>
 
-            <article class="interest">
+            <article class="interest reveal">
               <span class="interest-mark" aria-hidden="true">▚</span>
               <div>
                 <h3>terminal interfaces</h3>
@@ -476,7 +487,7 @@
               </div>
             </article>
 
-            <article class="interest">
+            <article class="interest reveal">
               <span class="interest-mark" aria-hidden="true">{ }</span>
               <div>
                 <h3>systems &amp; runtimes</h3>
@@ -484,7 +495,7 @@
               </div>
             </article>
 
-            <article class="interest">
+            <article class="interest reveal">
               <span class="interest-mark" aria-hidden="true">&gt;_</span>
               <div>
                 <h3>tools with manners</h3>
@@ -492,7 +503,7 @@
               </div>
             </article>
 
-            <article class="interest">
+            <article class="interest reveal">
               <span class="interest-mark" aria-hidden="true">$</span>
               <div>
                 <h3>Linux &amp; open source</h3>
@@ -500,7 +511,7 @@
               </div>
             </article>
 
-            <article class="interest">
+            <article class="interest reveal">
               <span class="interest-mark" aria-hidden="true">✦</span>
               <div>
                 <h3>the feel of software</h3>
@@ -509,7 +520,7 @@
             </article>
           </div>
 
-          <p class="interest-ground">
+          <p class="interest-ground reveal">
             <span aria-hidden="true">└─</span> The ground floor is Linux, a terminal, and a stubborn willingness to read the source.
           </p>
         </div>
@@ -524,7 +535,7 @@
         </div>
 
         <div class="section-content">
-          <div class="section-intro">
+          <div class="section-intro reveal">
             <h2 id="notes-title">Curiosity,<br>compiled.</h2>
             <p>
               I don't have a grand theory of software. I have a few habits that keep showing up
@@ -532,8 +543,8 @@
             </p>
           </div>
 
-          <div class="note-list">
-            <article class="note">
+          <div class="note-list" data-stagger>
+            <article class="note reveal">
               <p class="note-index">01</p>
               <div>
                 <h3>the spec comes first</h3>
@@ -546,7 +557,7 @@
               </div>
             </article>
 
-            <article class="note">
+            <article class="note reveal">
               <p class="note-index">02</p>
               <div>
                 <h3>verify against the boring version</h3>
@@ -559,7 +570,7 @@
               </div>
             </article>
 
-            <article class="note">
+            <article class="note reveal">
               <p class="note-index">03</p>
               <div>
                 <h3>the interface is part of the system</h3>
@@ -572,7 +583,7 @@
             </article>
           </div>
 
-          <div class="desk" role="group" aria-labelledby="desk-title">
+          <div class="desk reveal" role="group" aria-labelledby="desk-title">
             <div class="desk-head">
               <p id="desk-title"><span class="prompt">$</span> ls ~/desk</p>
               <p class="desk-note">only what is actually in the repos</p>
