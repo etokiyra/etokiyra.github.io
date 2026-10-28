@@ -2,12 +2,16 @@
   "use strict";
 
   /* ------------------------------------------------------------------ *
-   *  kiyra.lol — suzu is a real cat now.                                *
+   *  kiyra.lol — suzu is a real cat, and this is her good life.         *
    *                                                                     *
    *  She keeps a crepuscular predator's schedule on your local clock:   *
    *  hunting at midnight, zoomies at dawn, napping through the          *
    *  morning, sunbathing at noon, loafing all afternoon, playing at     *
    *  dusk, grooming in the evening, dozing before the hunt resumes.     *
+   *                                                                     *
+   *  There is no hunger meter and nothing decays — this is the good     *
+   *  part of a tamagotchi, permanently online. Care happens through     *
+   *  the buttons beside her; the console is for talking.                *
    *                                                                     *
    *  Everything here is decoration: without this file the site is       *
    *  fully readable, and every effect respects prefers-reduced-motion.  *
@@ -57,18 +61,18 @@
    * ------------------------------------------------------------------ */
 
   const FACE = {
-    asleep: "-.-",
-    dozing: "-.o",
-    asleep2: "=.=",
-    awake: "o.o",
-    wide: "0.0",
-    hunting: "@.@",
-    blink: "-.-",
-    happy: "^.^",
-    love: "^w^",
-    shock: "O.O",
-    drowsy: "o.-",
-    slit: ">.<",
+    asleep: "-ω-",
+    dozing: "oω-",
+    asleep2: "=ω=",
+    awake: "oωo",
+    wide: "0ω0",
+    hunting: "@ω@",
+    blink: "-ω-",
+    happy: "^ω^",
+    love: "^ω^",
+    shock: "OωO",
+    drowsy: "-ωo",
+    slit: ">ω<",
   };
 
   const SCHEDULE = [
@@ -355,11 +359,8 @@
     moon: $("#hero-moon"),
   };
 
-  const footerFace = $("#footer-face");
-
   let current = stateFor();
   let overrideFace = null; // {face, until}
-  let petting = false;
   let consoleAPI = null;
   let tailToken = 0;
 
@@ -373,7 +374,7 @@
   };
 
   const setFace = (face) => {
-    if (art.face) art.face.textContent = `(${face})`;
+    if (art.face) art.face.textContent = face;
   };
 
   const renderFace = () => {
@@ -445,20 +446,31 @@
     box.addEventListener("animationend", () => box.remove());
   };
 
+  const spawnFeather = () => {
+    if (!art.body || !motionOK()) return;
+    const feather = document.createElement("span");
+    feather.className = "feather";
+    feather.textContent = "~o~";
+    art.body.append(feather);
+    feather.addEventListener("animationend", () => feather.remove());
+  };
+
   const footerNotes = () => {
     const holder = $(".footer-art");
     if (!holder || !motionOK()) return;
     const note = document.createElement("span");
     note.className = "float-note footer-z";
     note.textContent = "z";
-    note.style.left = `${rand(46, 60).toFixed(1)}%`;
-    note.style.top = `${rand(34, 46).toFixed(1)}%`;
+    note.style.left = `${rand(44, 58).toFixed(1)}%`;
+    note.style.top = `${rand(30, 44).toFixed(1)}%`;
     holder.append(note);
     note.addEventListener("animationend", () => note.remove());
   };
 
   /* ------------------------------------------------------------------ *
-   *  Mood, relationship, memory — the tamagotchi ledger                 *
+   *  Bond, memory — the good half of the tamagotchi ledger              *
+   *  Nothing decays. There is no hunger. She is a website cat; she      *
+   *  is always fine. The numbers only ever go up.                       *
    * ------------------------------------------------------------------ */
 
   const REL_LEVELS = [
@@ -471,7 +483,10 @@
 
   const ledger = {
     pets: store.get("suzu-pets"),
-    mood: store.get("suzu-mood", 40),
+    fed: store.get("suzu-fed"),
+    played: store.get("suzu-played"),
+    groomed: store.get("suzu-groomed"),
+    lasers: store.get("suzu-lasers"),
     visits: store.get("suzu-visits", 0),
     firstSeen: store.get("suzu-first-seen"),
     rel() {
@@ -479,56 +494,31 @@
       for (const entry of REL_LEVELS) if (ledger.pets >= entry.min) level = entry;
       return level;
     },
-    saveMood() {
-      store.set("suzu-mood", Math.round(ledger.mood));
-      store.set("suzu-mood-time", Date.now());
-    },
-    addMood(amount) {
-      ledger.mood = clamp(ledger.mood + amount, 0, 100);
-      ledger.saveMood();
-    },
   };
 
   const initLedger = () => {
-    const now = Date.now();
     const today = new Date().toDateString();
-
     if (!ledger.firstSeen) {
-      ledger.firstSeen = now;
-      store.set("suzu-first-seen", now);
+      ledger.firstSeen = Date.now();
+      store.set("suzu-first-seen", ledger.firstSeen);
       ledger.visits = 1;
       store.set("suzu-visits", 1);
-      ledger.mood = 40;
-      ledger.saveMood();
       store.set("suzu-last-visit", today);
       return { firstEver: true };
     }
-
-    /* Mood decays 5 points per hour since the last save, floor 15. */
-    const lastTime = store.get("suzu-mood-time", now);
-    const hours = Math.max(0, (now - lastTime) / 3600000);
-    ledger.mood = clamp(ledger.mood - hours * 5, ledger.pets > 0 ? 15 : 5, 100);
-
     const lastVisit = store.getRaw("suzu-last-visit");
     let returning = false;
     if (lastVisit !== today) {
       ledger.visits += 1;
       store.set("suzu-visits", ledger.visits);
       store.set("suzu-last-visit", today);
-      ledger.addMood(8); /* welcome back */
       returning = true;
     }
-    ledger.saveMood();
     return { firstEver: false, returning };
   };
 
   const daysKnown = () =>
     Math.max(1, Math.ceil((Date.now() - ledger.firstSeen) / 86400000));
-
-  const moodBar = () => {
-    const filled = Math.round(ledger.mood / 10);
-    return `[${"♥".repeat(filled)}${"·".repeat(10 - filled)}]`;
-  };
 
   const petMilestone = () => {
     const n = ledger.pets;
@@ -551,11 +541,10 @@
    *  Petting, waking, state changes                                     *
    * ------------------------------------------------------------------ */
 
-  const pet = (fromConsole = false) => {
+  const pet = () => {
     const asleep = current.asleep;
     ledger.pets += 1;
     store.set("suzu-pets", ledger.pets);
-    ledger.addMood(asleep ? 3 : 6);
 
     const message = asleep
       ? pick([
@@ -570,11 +559,11 @@
     if (asleep) {
       celebrate(FACE.dozing, 1600);
     } else {
-      celebrate(ledger.mood > 85 ? FACE.love : FACE.happy, 2400);
+      celebrate(pick([FACE.happy, FACE.love, FACE.slit]), 2400);
     }
     sparkles();
-    if (motionOK()) burstHearts(asleep ? 1 : 3);
-    if (fromConsole && consoleAPI) consoleAPI.note(`suzu ${message}`);
+    burstHearts(asleep ? 1 : 3);
+    if (consoleAPI && Math.random() < 0.35) consoleAPI.note(`suzu ${message}`);
   };
 
   const wakeUp = (reason) => {
@@ -586,7 +575,6 @@
       if (consoleAPI) consoleAPI.note("suzu: THE DOT.");
     } else {
       setStatus("suzu wakes. judges you. forgives you. mostly.");
-      if (consoleAPI) consoleAPI.note("suzu wakes. judges you. forgives you. mostly.");
     }
     window.setTimeout(renderFace, 1500);
     return true;
@@ -596,16 +584,14 @@
     current = state;
     tailToken += 1;
     overrideFace = null;
-    petting = false;
 
     if (art.zz) {
-      art.zz.textContent = state.asleep ? (state.name === "sunbathing" ? "zZ." : "zzZ") : "   ";
+      art.zz.textContent = state.asleep ? "z z" : "   ";
     }
     if (art.window) {
       art.window.classList.toggle("is-sunbathing", state.name === "sunbathing");
       art.window.classList.toggle("is-breathing", state.asleep);
     }
-    if (footerFace) footerFace.textContent = " -.- ";
     renderFace();
     setStatus(statusFromPool(state, state.status));
 
@@ -627,7 +613,16 @@
    *  Loops: tail, blinking, idle particles, the minute hand             *
    * ------------------------------------------------------------------ */
 
-  const TAIL_FRAMES = ["~~~▌", "~~▌~", "~▌~~", "▌~~~", "~▌~~", "~~▌~"];
+  const TAIL_FRAMES = [
+    "~~~~~~",
+    "~▌~~~~",
+    "~~▌~~~",
+    "~~~▌~~",
+    "~~~~▌~",
+    "~~~▌~~",
+    "~~▌~~~",
+    "~▌~~~~",
+  ];
   const startTail = () => {
     const token = tailToken;
     let index = 0;
@@ -674,7 +669,162 @@
   };
 
   /* ------------------------------------------------------------------ *
-   *  Suzu's console — a real little terminal with a cat in it           *
+   *  Care actions — buttons, not commands. Each with a stack of         *
+   *  possible outcomes, because she is her own cat.                     *
+   * ------------------------------------------------------------------ */
+
+  const CARE = [
+    {
+      id: "pet",
+      run: () => pet(),
+    },
+    {
+      id: "feed",
+      run: () => {
+        ledger.fed += 1;
+        store.set("suzu-fed", ledger.fed);
+        spawnFish();
+        const line = current.asleep
+          ? pick([
+              "suzu sleep-walks one paw to the treat. acceptable.",
+              "she eats with 10% of her brain. the rest stays asleep.",
+              "the treat vanishes. she never moved. do not ask.",
+              "dream-eating counts. probably.",
+            ])
+          : pick([
+              "the treat travels across the desk. suzu travels faster.",
+              "suzu: (she is at the treat before the treat exists.)",
+              "a clean catch. she pretends it was nothing.",
+              "suzu: i would do anything for shrimp. and i have.",
+              "she chews exactly twice. it is a whole ceremony.",
+              "suzu: the bowl is 41% full again. this is a famine.",
+              "the treat is gone. the memory remains.",
+              "suzu: (she leads you to the bowl even though she just ate.)",
+            ]);
+        setStatus(line.replace(/^suzu: /, "suzu: "));
+        celebrate(current.asleep ? FACE.dozing : FACE.love, 2600);
+        if (!current.asleep) burstHearts(2);
+        if (consoleAPI && Math.random() < 0.4) consoleAPI.note(line);
+      },
+    },
+    {
+      id: "play",
+      run: () => {
+        ledger.played += 1;
+        store.set("suzu-played", ledger.played);
+        if (current.asleep) {
+          const line = pick([
+            "she swats once from inside the dream. counts double in dream points.",
+            "the feather passes. a paw rises, considers, declines.",
+            "playing with a sleeping cat is a solo sport.",
+          ]);
+          setStatus(line);
+          if (consoleAPI && Math.random() < 0.4) consoleAPI.note(line);
+          return;
+        }
+        spawnFeather();
+        celebrate(FACE.wide, 1300);
+        sparkles();
+        const line = pick([
+          "the feather dangles. the pounce lands. the feather escapes. classic.",
+          "suzu: (butt wiggle. pre-pounce. brace yourself.)",
+          "she catches the invisible. victory is declared.",
+          "three consecutive air-pounces. the crowd goes quiet.",
+          "the bottle cap is flicked under the desk. round two.",
+          "suzu: again. AGAIN. (the feather is tired. suzu is not.)",
+          "a full sprint, a skid, a leap. ten out of ten. no notes.",
+          "the feather is batted behind the window bar. a draw.",
+        ]);
+        setStatus(line);
+        window.setTimeout(() => {
+          celebrate(FACE.happy, 1800);
+          burstHearts(1);
+        }, 1400);
+        if (consoleAPI && Math.random() < 0.4) consoleAPI.note(line);
+      },
+    },
+    {
+      id: "groom",
+      run: () => {
+        ledger.groomed += 1;
+        store.set("suzu-groomed", ledger.groomed);
+        const line = current.asleep
+          ? "grooming is scheduled after the nap. the nap is scheduled after the grooming."
+          : pick([
+              "paw lick. paw lick. whisker check. passed.",
+              "suzu: (one more patch of fluff, then the world may resume.)",
+              "behind-the-ear access granted. a rare honor.",
+              "the fluff is reorganized. the fluff wins anyway.",
+              "suzu grooms with the focus of a type checker.",
+              "every whisker accounted for. inspection passed.",
+            ]);
+        setStatus(line);
+        celebrate(current.asleep ? FACE.asleep2 : FACE.happy, 2200);
+        if (consoleAPI && Math.random() < 0.4) consoleAPI.note(line);
+      },
+    },
+    {
+      id: "laser",
+      run: () => {
+        ledger.lasers += 1;
+        store.set("suzu-lasers", ledger.lasers);
+        spawnLaser();
+        if (current.asleep) wakeUp("laser");
+        else celebrate(FACE.hunting, 2200);
+        const line = pick([
+          "suzu pounces. the dot escapes. obviously.",
+          "a wall. a bookshelf. nowhere is safe. the dot remains free.",
+          "she predicts the dot's path. the dot reads her prediction.",
+          "the dot touches the moon. suzu follows. physics objects.",
+        ]);
+        window.setTimeout(() => {
+          setStatus(line);
+          sparkles();
+          if (consoleAPI && Math.random() < 0.5) consoleAPI.note(line);
+        }, 3200);
+      },
+    },
+  ];
+
+  const initCare = () => {
+    const row = $("#care-row");
+    if (!row) return;
+    row.hidden = false;
+    $$(".care-button", row).forEach((button) => {
+      const action = CARE.find((entry) => entry.id === button.dataset.care);
+      if (!action) return;
+      button.addEventListener("click", () => {
+        if (document.activeElement === button) button.blur();
+        action.run();
+      });
+    });
+  };
+
+  const initSuzuBody = () => {
+    const artEl = $("#suzu-art");
+
+    if (artEl) {
+      artEl.addEventListener("click", (event) => {
+        if (event.target.closest("#hero-moon")) return;
+        pet();
+      });
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) checkSchedule();
+    });
+
+    window.setInterval(checkSchedule, 60000);
+
+    if (motionOK()) {
+      window.setInterval(() => {
+        if (!document.hidden && current.asleep) footerNotes();
+      }, 7000);
+    }
+  };
+
+  /* ------------------------------------------------------------------ *
+   *  Suzu's console — for talking, not for care. Care is buttons.       *
    * ------------------------------------------------------------------ */
 
   const files = {
@@ -709,7 +859,7 @@
     "suzu: my tail says yes. my tail says many things.",
     "suzu: ask the moon. she answers at 02:14.",
     "suzu: unlikely, but the zoomies disagree.",
-    "suzu: yes, if you believe. also if you feed me.",
+    "suzu: yes, if you believe. also if you feed me. the button is right there.",
     "suzu: the compiler is always right. wait. that's the spec. both are right.",
     "suzu: it depends whether it's before or after my nap.",
     "suzu: i have seen the future. there is a warm keyboard in it.",
@@ -728,10 +878,10 @@
     {
       match: /\b(hungry|food|eat|treat|fish|snack|dinner|breakfast)\b/,
       lines: [
-        "suzu: the bowl is 41% full. this is a famine.",
+        "suzu: the feed button exists. i am not pointing at it. i am pointing at it.",
         "suzu: i ate at 06:00. that was another lifetime.",
         "suzu: feed the cat, feed the compiler. it's the same machine.",
-        "suzu: (she leads you to the bowl even though she just ate.)",
+        "suzu: (she looks at the feed button. then at you. then at the button.)",
         "suzu: i would trade three of your passwords for one shrimp.",
       ],
     },
@@ -790,7 +940,7 @@
       ],
     },
     {
-      match: /\b(music|song|dj|vynl|bpm|mix)\b/,
+      match: /\b(music|song|dj|bpm|mix)\b/,
       lines: [
         "suzu: put on something at 126 bpm. my tail keeps the tempo.",
         "suzu: the fft spectrum is my favorite lightning.",
@@ -815,7 +965,7 @@
     },
   ];
 
-  const GREETING = (state) => {
+  const GREETING = () => {
     const hour = new Date().getHours();
     const part =
       hour < 5 ? "the hunt is on" : hour < 8 ? "the zoomies just ended" :
@@ -830,38 +980,8 @@
     ]);
   };
 
-  const initSuzuBody = () => {
-    const petButton = $("#pet-suzu");
-    const artEl = $("#suzu-art");
-
-    if (petButton) {
-      petButton.hidden = false;
-      petButton.addEventListener("click", () => pet());
-    }
-
-    if (artEl) {
-      artEl.addEventListener("click", (event) => {
-        if (event.target.closest("#hero-moon")) return;
-        pet();
-      });
-    }
-
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) checkSchedule();
-    });
-
-    window.setInterval(checkSchedule, 60000);
-
-    if (motionOK()) {
-      window.setInterval(() => {
-        if (!document.hidden && current.asleep) footerNotes();
-      }, 7000);
-    }
-  };
-
-  /* ------------------------------------------------------------------ *
-   *  Console                                                            *
-   * ------------------------------------------------------------------ */
+  const CARE_WORDS =
+    /\b(pet|feed|treat|play|groom|laser|nap|wake|hunt)\b/;
 
   const initConsole = () => {
     const box = $("#suzu-console");
@@ -912,23 +1032,21 @@
           "  ls          — look around",
           "  cat <name>  — read: koda, kitten, vynl, grimmoire, suzu, ~/.why",
           "  open <name> — jump to a project or section",
-          "  pet         — pet suzu (or click the cat)",
           "  talk <...>  — actually talk to suzu. she has opinions.",
           "  ask <...>   — ask suzu anything. answers are legally binding.",
-          "  feed        — a treat appears. suzu appears too.",
-          "  play        — dangle the feather",
-          "  groom       — request a grooming session",
-          "  laser       — you know exactly what this does",
-          "  mood        — suzu's mood, in a bar",
-          "  stats       — the tamagotchi ledger",
-          "  schedule    — suzu's day, hour by hour",
           "  meow        — say hi in her language",
           "  moon        — make a wish",
           "  stars       — a small shower",
           "  lights      — toggle the lamp",
+          "  mood        — how suzu is doing (always fine)",
+          "  stats       — the friendship ledger",
+          "  schedule    — suzu's day, hour by hour",
           "  date        — the time, cat-adjusted",
           "  clear       — clean the console",
           "  exit        — let suzu be",
+          "",
+          "  care — pet, feed, play, groom, laser — lives on the",
+          "  buttons beside her. she refuses to be administered by CLI.",
         ].forEach((lineText) => print(lineText));
         return null;
       },
@@ -957,15 +1075,39 @@
       goto: (args) => goto((args[0] || "").toLowerCase()),
       cd: (args) => goto((args[0] || "home").toLowerCase().replace(/[~/.]/g, "") || "home"),
 
-      /* --- suzu-specific --- */
-      pet: () => {
-        pet(true);
-        return null;
+      /* --- talking to suzu --- */
+      talk: (args) => {
+        const text = args.join(" ");
+        if (current.asleep) return pick(current.sleepyReplies);
+        if (!text) return pick(current.talk);
+        if (CARE_WORDS.test(text.toLowerCase())) {
+          return "suzu: that's what the buttons are for. (she gestures at them with her whole face.)";
+        }
+        const topic = TOPICS.find((entry) => entry.match.test(text.toLowerCase()));
+        if (topic) {
+          if (Math.random() < 0.35) burstHearts(1);
+          return pick(topic.lines);
+        }
+        return pick([
+          `suzu: "${text}". (she considers it. slowly.) ...valid.`,
+          `suzu: "${text}" — she blinks. that's a yes.`,
+          `suzu: interesting. tell me more at dusk. everything is better at dusk.`,
+          `suzu: (she files "${text}" under things the tall one says.)`,
+          `suzu: i've heard worse. i've also heard better. mostly worse.`,
+          `suzu: (she has no idea what that means, and commits anyway.)`,
+        ]);
+      },
+      chat: (args) => commands.talk(args),
+      say: (args) => commands.talk(args),
+      ask: (args) => {
+        if (current.asleep) return pick(current.sleepyReplies);
+        return args.length === 0
+          ? "ask what? suzu answers everything. try: ask will the build pass"
+          : pick(ASK_ANSWERS);
       },
       meow: () => {
         if (current.asleep) {
-          const woke = Math.random() < 0.4;
-          if (woke) {
+          if (Math.random() < 0.4) {
             wakeUp("meow");
             return "one ear rotates. suzu surfaces: mrrp? YOU MEOWED?";
           }
@@ -987,92 +1129,19 @@
         celebrate(FACE.happy, 2000);
         return "suzu purrs. the window vibrates faintly. ♡";
       },
-      talk: (args) => {
-        const text = args.join(" ");
-        if (current.asleep) return pick(current.sleepyReplies);
-        if (!text) return pick(current.talk);
-        const topic = TOPICS.find((entry) => entry.match.test(text.toLowerCase()));
-        if (topic) {
-          ledger.addMood(2);
-          if (Math.random() < 0.35) burstHearts(1);
-          return pick(topic.lines);
-        }
-        return pick([
-          `suzu: "${text}". (she considers it. slowly.) ...valid.`,
-          `suzu: "${text}" — she blinks. that's a yes.`,
-          `suzu: interesting. tell me more at dusk. everything is better at dusk.`,
-          `suzu: (she files "${text}" under things the tall one says.)`,
-          `suzu: i've heard worse. i've also heard better. mostly worse.`,
-          `suzu: (she has no idea what that means, and commits anyway.)`,
-        ]);
-      },
-      chat: (args) => commands.talk(args),
-      say: (args) => commands.talk(args),
-      ask: (args) => {
-        if (current.asleep) return pick(current.sleepyReplies);
-        ledger.addMood(1);
-        return args.length === 0
-          ? "ask what? suzu answers everything. try: ask will the build pass"
-          : pick(ASK_ANSWERS);
-      },
-      feed: () => {
-        if (current.asleep) {
-          ledger.addMood(4);
-          celebrate(FACE.dozing, 1800);
-          return pick([
-            "suzu sleep-walks one paw to the treat. acceptable.",
-            "she eats with 10% of her brain. the rest stays asleep.",
-          ]);
-        }
-        ledger.addMood(8);
-        spawnFish();
-        celebrate(FACE.love, 2600);
-        burstHearts(2);
-        return pick([
-          "the treat travels across the desk. suzu travels faster.",
-          "suzu: (she is at the treat before the treat exists.)",
-          "a clean catch. mood improved.",
-        ]);
-      },
-      treat: () => commands.feed(),
-      play: () => {
-        if (current.asleep) {
-          ledger.addMood(2);
-          return "she swats once from inside the dream. counts double in dream points.";
-        }
-        ledger.addMood(10);
-        celebrate(FACE.wide, 1400);
-        sparkles();
-        window.setTimeout(() => celebrate(FACE.happy, 1800), 1500);
-        return pick([
-          "the feather dangles. the pounce lands. the feather escapes. classic.",
-          "suzu: (butt wiggle. pre-pounce. brace yourself.)",
-          "she catches the invisible. victory is declared.",
-        ]);
-      },
-      groom: () => {
-        if (current.asleep) return "grooming is scheduled after the nap. the nap is scheduled after the grooming.";
-        ledger.addMood(5);
-        celebrate(FACE.asleep2, 2200);
-        return pick([
-          "paw lick. paw lick. whisker check. passed.",
-          "suzu: (one more patch of fluff, then the world may resume.)",
-        ]);
-      },
-      laser: () => {
-        spawnLaser();
-        if (current.asleep) wakeUp("laser");
-        else celebrate(FACE.hunting, 2200);
-        window.setTimeout(() => {
-          setStatus("suzu pounces. the dot escapes. obviously.");
-          sparkles();
-          ledger.addMood(7);
-        }, 3200);
-        return "a red dot appears. physics becomes a suggestion.";
-      },
+
+      /* --- care is buttons now; suzu is firm about this --- */
+      pet: () => "suzu: petting is a button, not a command. (she points at the buttons.)",
+      feed: () => "suzu: the treat jar is wired to the feed button. CLI access denied.",
+      play: () => "suzu: the feather is button-operated. union rules.",
+      groom: () => "suzu: grooming is booked via the button. her calendar is full anyway.",
+      laser: () => "suzu: the laser is button-activated. for safety. hers.",
+      nap: () => "suzu: she schedules her own naps. look at the status line.",
+      wake: () => (current.asleep ? "suzu: she heard you. she is choosing not to." : "suzu: she is already awake. mostly."),
+
+      /* --- toys that are not care --- */
       box: () => {
         spawnBox();
-        ledger.addMood(4);
         return pick([
           "a box? WHERE. (it's the console. she is in it.)",
           "suzu: if it fits, i sits. she fits. she sits.",
@@ -1082,7 +1151,6 @@
       cucumber: () => {
         celebrate(FACE.shock, 2600);
         sparkles();
-        ledger.addMood(-3);
         return "suzu: DO NOT. bring that. here. (she is on the ceiling.)";
       },
       bird: () => {
@@ -1090,64 +1158,8 @@
         celebrate(FACE.hunting, 2000);
         return "suzu: ek-ek-ek-ek. (the glass remains undefeated.)";
       },
-      hunt: () => {
-        if (current.asleep) return "the hunt is tonight. the nap is now. priorities.";
-        celebrate(FACE.hunting, 2400);
-        return pick([
-          "suzu: the prey is a dust mote. the mote does not know.",
-          "suzu: i hunt for the honor. the honor is a warm keyboard.",
-        ]);
-      },
-      scratch: () =>
-        pick([
-          "suzu: the scratching post is a lie. the chair is truth.",
-          "suzu: that's MY couch. i'm the couch's cat.",
-        ]),
-      wake: () => {
-        if (!current.asleep) return "already up. the hunt never stops.";
-        if (Math.random() < 0.5) {
-          ledger.addMood(-2);
-          return "one eye opens. closes. suzu declines. try again in an hour.";
-        }
-        wakeUp("manual");
-        ledger.addMood(-1);
-        return null;
-      },
-      nap: () => {
-        if (current.asleep) return "she is already there. you're late.";
-        ledger.addMood(3);
-        celebrate(FACE.asleep, 2400);
-        return "suzu circles twice, folds, and is unconscious in four seconds.";
-      },
-      mood: () => {
-        const band =
-          ledger.mood >= 85 ? "purring at factory settings" :
-          ledger.mood >= 60 ? "content. suspiciously content." :
-          ledger.mood >= 35 ? "the aloof phase. it passes." :
-          "suzu looks at you the way cats judge.";
-        return `mood ${moodBar()} ${Math.round(ledger.mood)}% — ${band}`;
-      },
-      stats: () => {
-        const rel = ledger.rel();
-        [
-          `✦ suzu — day ${daysKnown()} of knowing you`,
-          `  pets: ${ledger.pets}   visits: ${ledger.visits}`,
-          `  mood: ${moodBar()} ${Math.round(ledger.mood)}%`,
-          `  bond: ${rel.name} — ${rel.line}`,
-          `  right now: ${current.name} (${current.asleep ? "asleep" : "awake"})`,
-        ].forEach((lineText) => print(lineText, "c-ok"));
-        return null;
-      },
-      schedule: () => {
-        SCHEDULE.forEach((slot) => {
-          const marker = slot === current ? "▸" : " ";
-          const line = `${marker} ${String(slot.from).padStart(2, "0")}:00–${String(slot.to % 24).padStart(2, "0")}:00  ${slot.name}${slot.asleep ? " (asleep)" : ""}`;
-          print(line, slot === current ? "c-ok" : "c-out");
-        });
-        print("crepuscular: peak hours at dawn and dusk.", "c-dim");
-        return null;
-      },
-      day: () => commands.schedule(),
+
+      /* --- scenery --- */
       moon: () => {
         shootStar();
         if (art.moon) glowMoon();
@@ -1163,13 +1175,42 @@
           ? "the lamp hums on. warm corners, same midnight."
           : "lights off. back to midnight.";
       },
+      mood: () => {
+        const rel = ledger.rel();
+        return pick([
+          `mood: excellent, as always. she is a website cat — nothing depletes.`,
+          `mood: [♥♥♥♥♥♥♥♥♥♥] suzu is exactly as fine as she was a minute ago.`,
+          `she is fine. she was fine at 02:14. she will be fine at 03:14.`,
+        ]) + ` bond: ${rel.name}.`;
+      },
+      stats: () => {
+        const rel = ledger.rel();
+        [
+          `✦ suzu — day ${daysKnown()} of knowing you`,
+          `  pets: ${ledger.pets}   treats: ${ledger.fed}   plays: ${ledger.played}`,
+          `  grooms: ${ledger.groomed}   lasers: ${ledger.lasers}   visits: ${ledger.visits}`,
+          `  bond: ${rel.name} — ${rel.line}`,
+          `  right now: ${current.name} (${current.asleep ? "asleep" : "awake"})`,
+        ].forEach((lineText) => print(lineText, "c-ok"));
+        return null;
+      },
+      schedule: () => {
+        SCHEDULE.forEach((slot) => {
+          const marker = slot === current ? "▸" : " ";
+          const line = `${marker} ${String(slot.from).padStart(2, "0")}:00–${String(slot.to % 24).padStart(2, "0")}:00  ${slot.name}${slot.asleep ? " (asleep)" : ""}`;
+          print(line, slot === current ? "c-ok" : "c-out");
+        });
+        print("crepuscular: peak hours at dawn and dusk.", "c-dim");
+        return null;
+      },
+      day: () => commands.schedule(),
       date: () => `it is exactly ${hhmm()}. suzu's schedule: ${current.name}.`,
       time: () => commands.date(),
       clear: () => {
         out.textContent = "";
         return null;
       },
-      hello: () => (current.asleep ? pick(current.sleepyReplies) : GREETING(current)),
+      hello: () => (current.asleep ? pick(current.sleepyReplies) : GREETING()),
       hi: () => commands.hello(),
       hey: () => commands.hello(),
       yo: () => commands.hello(),
@@ -1259,7 +1300,7 @@
     } else if (boot.returning) {
       print(`✦ suzu remembers you. day ${daysKnown()} of knowing you.`, "c-ok");
     }
-    print(`✦ suzu console — type help and press enter`, "c-ok");
+    print("✦ suzu console — type help and press enter", "c-ok");
   };
 
   /* ------------------------------------------------------------------ *
@@ -1341,7 +1382,7 @@
   };
 
   /* ------------------------------------------------------------------ *
-   *  Ambience: cursor glow, click sparks, shooting stars                *
+   *  Ambience: cursor glow, click bursts, shooting stars                *
    * ------------------------------------------------------------------ */
 
   const glowMoon = () => {
@@ -1360,6 +1401,44 @@
     star.style.setProperty("--sx", `${rand(4, 58).toFixed(1)}%`);
     layer.append(star);
     star.addEventListener("animationend", () => star.remove());
+  };
+
+  const clickBurst = (x, y) => {
+    if (!motionOK()) return;
+    if ($$(".click-spark").length > 40) return;
+
+    const ring = document.createElement("span");
+    ring.className = "click-ring";
+    ring.style.left = `${x}px`;
+    ring.style.top = `${y}px`;
+    document.body.append(ring);
+    ring.addEventListener("animationend", () => ring.remove());
+
+    const main = document.createElement("span");
+    main.className = "click-spark";
+    main.textContent = pick(["✦", "✧"]);
+    main.style.left = `${x}px`;
+    main.style.top = `${y}px`;
+    main.style.color = pick(["var(--lav)", "var(--pink)", "var(--gold)"]);
+    main.style.setProperty("--dy", "-46px");
+    main.style.setProperty("--rot", `${rand(-90, 90).toFixed(0)}deg`);
+    document.body.append(main);
+    main.addEventListener("animationend", () => main.remove());
+
+    for (let i = 0; i < 3; i += 1) {
+      const spark = document.createElement("span");
+      spark.className = "click-spark";
+      spark.textContent = pick(["✦", "✧", "·", "♡"]);
+      spark.style.left = `${x}px`;
+      spark.style.top = `${y}px`;
+      spark.style.color = pick(["var(--lav)", "var(--pink)", "var(--mint)", "var(--gold)"]);
+      spark.style.setProperty("--dx", `${rand(-34, 34).toFixed(0)}px`);
+      spark.style.setProperty("--dy", `${rand(-56, -18).toFixed(0)}px`);
+      spark.style.setProperty("--rot", `${rand(-120, 120).toFixed(0)}deg`);
+      spark.style.animationDelay = `${i * 70}ms`;
+      document.body.append(spark);
+      spark.addEventListener("animationend", () => spark.remove());
+    }
   };
 
   const initAmbience = () => {
@@ -1436,17 +1515,7 @@
       "pointerdown",
       (event) => {
         if (event.button !== 0) return;
-        if ($$(".click-spark").length > 30) return;
-        const spark = document.createElement("span");
-        spark.className = "click-spark";
-        spark.textContent = pick(["✦", "✧", "·"]);
-        spark.style.left = `${event.clientX}px`;
-        spark.style.top = `${event.clientY}px`;
-        spark.style.color = pick(["var(--lav)", "var(--pink)", "var(--mint)", "var(--gold)"]);
-        spark.style.setProperty("--dx", `${rand(-16, 16).toFixed(0)}px`);
-        spark.style.setProperty("--rot", `${rand(-90, 90).toFixed(0)}deg`);
-        document.body.append(spark);
-        spark.addEventListener("animationend", () => spark.remove());
+        clickBurst(event.clientX, event.clientY);
       },
       true
     );
@@ -1666,6 +1735,7 @@
    * ------------------------------------------------------------------ */
 
   initSuzuBody();
+  initCare();
   initConsole();
   initHeader();
   initReveal();
@@ -1685,7 +1755,14 @@
         if (state) applyState(state, true);
       },
       state: () => current.name,
-      ledger: () => ({ ...ledger, rel: ledger.rel().name }),
+      ledger: () => ({
+        pets: ledger.pets,
+        fed: ledger.fed,
+        played: ledger.played,
+        groomed: ledger.groomed,
+        lasers: ledger.lasers,
+        rel: ledger.rel().name,
+      }),
     };
   }
 })();

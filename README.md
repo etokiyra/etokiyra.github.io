@@ -2,8 +2,10 @@
 
 The source for [kiyra.lol](https://kiyra.lol/): a single-page
 personal site for **kiyra** (`etokiyra`), built around a midnight terminal
-bedroom, an ASCII cat called Suzu with a working little console, and four real
-projects. The site is served by GitHub Pages from the `etokiyra.github.io`
+bedroom, a star-cat called Suzu who keeps real predator hours and answers to
+care buttons, and four real projects. Suzu is drawn in the same visual
+vocabulary as Koda's familiar (`/\___/\`, `ω` mouth, `✦` stars, `☾` moon).
+The site is served by GitHub Pages from the `etokiyra.github.io`
 repository, with `site/CNAME` pinning the custom domain.
 
 The site is plain, hand-written HTML, CSS, and a small amount of JavaScript. There
@@ -41,20 +43,30 @@ files, not the README or workflow.
 
 The page is a single static file, but it plays back:
 
-- **Suzu's console** lives inside the hero terminal window. Type `help` and
-  press enter. It supports `whoami`, `ls`, `cat <name>`, `open <name>` (jumps
-  to a section), `pet`, `meow`, `purr`, `moon` (shooting star), `lights`
-  (warm lamp overlay), `date`, `clear`, `exit`, a small command history
-  (↑/↓), and a few hidden reactions (`sudo`, `rm`, editor names).
-- **Suzu reacts to things.** Click the cat (or the button) to pet her — the
-  count persists in `localStorage` and unlocks milestone messages. She blinks,
-  wakes when the console is focused, and sleeps when you leave the tab.
+- **Suzu keeps a crepuscular cat's schedule** on the visitor's local clock:
+  hunting at midnight, dawn zoomies, a morning nap, sunbathing at noon,
+  loafing through the afternoon, playing at dusk, grooming in the evening,
+  and dozing before the hunt resumes. Each state has its own faces, tail
+  speed, idle particles, status lines and arrival announcements, and the
+  active slot is re-checked every minute and on tab return.
+- **Care is buttons, not commands.** A row beside her — pet, feed, play,
+  groom, laser — each with a stack of random outcomes and its own animation
+  (hearts, a treat fish, a dangling toy, a laser dot). Nothing depletes:
+  this is deliberately the good half of a tamagotchi, permanently online.
+  The pet count persists in `localStorage` and unlocks milestone messages.
+- **Suzu's console** lives inside the hero terminal window for talking and
+  navigation: `help`, `whoami`, `ls`, `cat <name>`, `open <name>` (jumps to a
+  section), `talk <anything>` (topic-aware dialogue), `ask` (cat 8-ball),
+  `meow`, `moon` (shooting star), `lights` (warm lamp overlay), `mood`,
+  `stats`, `schedule`, `date`, `clear`, `exit`, command history (↑/↓), and a
+  few hidden reactions (`box`, `cucumber`, `bird`, `sudo`, `rm`). Care
+  commands politely redirect to the buttons.
 - **The moon** in the hero art triggers a shooting star when clicked; stars
   also cross the hero occasionally on their own.
 - **Elsewhere:** scroll reveals, a reading-progress line and live clock in the
   header, terminal cards that tilt under the cursor, vynl's spectrum bars that
-  dance while visible, flickering candles in Grimmoire's chapel, a soft cursor
-  glow, and a tiny spark wherever you click.
+  dance while visible, flickering braziers in Grimmoire's chapel, a soft cursor
+  glow, and a spark burst with an expanding ring wherever you click.
 - **Secrets:** the Konami code (↑↑↓↓←→←→BA) makes it rain stars; typing
   `meow` anywhere on the page (outside the console) makes Suzu answer.
 
@@ -80,7 +92,7 @@ nothing to compile.
   `site/assets/css/style.css`.
 - **Suzu's messages, her console commands, and the active nav link:**
   `site/assets/js/site.js`. The page is fully readable and navigable with
-  JavaScript disabled; the “pet suzu” button and the console are only revealed
+  JavaScript disabled; the care buttons and the console are only revealed
   by JavaScript, and every effect is skipped under `prefers-reduced-motion`.
 - **Social preview:** edit `tools/og-card.html`, then regenerate `site/assets/og.png`
   at exactly 1200 × 630. In this environment:

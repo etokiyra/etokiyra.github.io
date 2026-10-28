@@ -119,29 +119,30 @@
               <span class="window-meta" aria-hidden="true">tty/01</span>
             </div>
             <div class="window-body">
-              <pre class="mascot-art" id="suzu-art" title="pet suzu" role="img" aria-label="Suzu, a small ASCII cat, sits on a terminal windowsill beneath a crescent moon and scattered stars.">
-<span class="art-stars">        ✦                    ·</span>
-<span class="art-moon" id="hero-moon">                  ___
-                 /   \
-                |  ☾  |
-   .             \___/</span>                 <span class="art-star">.</span>
-<span class="art-cat">          /\_/\
-         <span id="suzu-face">( -.- )</span>    <span class="art-zz" id="suzu-zz">zzZ</span>
-        =&gt; ^ &lt;=       ♡
-       .--'-----'--.
-      /             \
-     |   .       .   |
-     |  ( )     ( )  |
-      \             /
-       '-----------'</span>      <span class="art-tail" id="suzu-tail">~~~▌</span>
-<span class="art-sill">   _______________________________
-  | kiyra@midnight:~$          █ |
-  |_______________________________|</span>
+              <pre class="mascot-art" id="suzu-art" title="pet suzu" role="img" aria-label="Suzu, a small star-cat in the koda familiar family, sits beside a crescent moon and scattered stars above a terminal prompt.">
+<span class="art-stars">  ✦               ·             </span><span class="art-moon" id="hero-moon">☾</span><span class="art-stars">   </span>
+<span class="art-stars">        ·              ✧        ·</span>
+
+<span class="art-cat">              /\___/\
+             (  <span id="suzu-face">oωo</span>  )     <span class="art-zz" id="suzu-zz">   </span>
+               &gt; ω &lt;            </span><span class="art-star">·</span><span class="art-cat">
+              /|    |\
+             / |    | \        </span><span class="art-heart">♡</span><span class="art-cat">
+                |____|  </span><span class="art-tail" id="suzu-tail">~~~~~~</span><span class="art-cat">
+</span><span class="art-sill">  ______________________________
+ |  kiyra@midnight:~$           █ |
+ |________________________________|</span>
               </pre>
 
               <div class="mascot-caption">
                 <p class="mascot-status" id="suzu-status" role="status">asleep at 02:14</p>
-                <button class="pet-button" id="pet-suzu" type="button" hidden>pet suzu <span aria-hidden="true">♡</span></button>
+              </div>
+              <div class="care-row" id="care-row" hidden>
+                <button class="care-button" type="button" data-care="pet">pet <span aria-hidden="true">♡</span></button>
+                <button class="care-button" type="button" data-care="feed">feed <span aria-hidden="true">✦</span></button>
+                <button class="care-button" type="button" data-care="play">play <span aria-hidden="true">♪</span></button>
+                <button class="care-button" type="button" data-care="groom">groom <span aria-hidden="true">✧</span></button>
+                <button class="care-button" type="button" data-care="laser">laser <span aria-hidden="true">●</span></button>
               </div>
               <div class="mascot-console" id="suzu-console" hidden>
                 <div class="console-out" id="console-out" role="log" aria-live="polite"></div>
@@ -239,25 +240,27 @@
                   <span class="project-status">active</span>
                 </div>
                 <h3 id="koda-title">Koda</h3>
-                <p class="project-kicker">an IDE that arrives already knowing the language</p>
+                <p class="project-kicker">your cozy little coding space</p>
                 <p>
-                  Koda is a terminal-native development environment built around one promise:
-                  install it, open a project, start coding. No plugin marketplace, no
-                  hand-written LSP config. It detects the language, brings built-in
+                  Koda is a terminal-native IDE built around one promise: install it, open
+                  a project, start coding. No plugin marketplace, no hand-written LSP
+                  config, no dotfiles to maintain. It detects the language, brings built-in
                   intelligence, and hands over to a language server when one is available —
                   including fetching and verifying the toolchain itself.
                 </p>
                 <p>
                   The most interesting part is where the complexity went. Language-specific
-                  logic is kept out of the editor and UI. Detection combines filenames,
-                  shebangs, extensions, content, and project markers. Expensive work runs on a
-                  background worker, so the interface stays quiet while the machinery
-                  underneath does the hard part.
+                  logic never leaks into the editor or the UI. Detection weighs five signals
+                  — filename, shebang, extension, content, project context — and a project
+                  marker never overrides a file's own nature. Expensive work runs on a
+                  background worker, so the interface repaints only when something actually
+                  changed.
                 </p>
                 <ul class="detail-list">
-                  <li><span aria-hidden="true">✦</span> Built-in diagnostics, completion, symbols and navigation keep working offline.</li>
-                  <li><span aria-hidden="true">✦</span> Managed toolchains are checksum- or signature-verified and isolated under Koda's own directory.</li>
-                  <li><span aria-hidden="true">✦</span> Transparent by default: the terminal's background, blur and wallpaper stay visible.</li>
+                  <li><span aria-hidden="true">✦</span> 27 languages in one table, each with built-in offline intelligence; LSP is optional and marked, never required.</li>
+                    <li><span aria-hidden="true">✦</span> Managed toolchains are pinned, isolated, and verified after install by running the real tool — never just because a file exists.</li>
+                    <li><span aria-hidden="true">✦</span> Transparency first: Koda never paints an opaque background, so your terminal's theme, blur and wallpaper keep working.</li>
+                    <li><span aria-hidden="true">✦</span> A star-cat keeps you company on the welcome screen — never behind your code.</li>
                 </ul>
                 <div class="project-foot">
                   <ul class="tech-list" aria-label="Koda technologies">
@@ -270,16 +273,18 @@
               <div class="project-visual">
                 <div class="term term-koda">
                   <div class="term-bar"><span class="term-title">✦ koda</span><span>src/main.rs</span></div>
-                  <pre role="img" aria-label="A stylized sketch of Koda's editor: a file tree beside Rust source and a status line.">
- <span class="term-rule">──────────────────────────────────────────────</span>
-   <span class="term-accent">▸ src</span>          1  use std::io;
-   <span class="term-accent">▸ app</span>          2
-   · Cargo.toml   3  fn main() {
-   · README.md    4      let name = "koda";
+                  <pre role="img" aria-label="A stylized sketch of Koda: a welcome line, a file tree beside Rust source with line numbers, and a status line reading Rust, lsp active, main branch.">
+ <span class="term-accent">✦ koda</span> — your cozy little coding space
+
+  <span class="term-accent">❯ src</span>           1  use std::io;
+  <span class="term-accent">❯ app</span>           2
+    · Cargo.toml  3  fn main() {
+    · README.md   4      let name = "koda";
                   5      print(name);
                   6  }
- <span class="term-rule">──────────────────────────────────────────────</span>
-   Rust   ✓ lsp   ☾ main      Ln 5, Col 3</pre>
+
+ <span class="term-rule">──────────────────────────────────────────</span>
+  Rust · ✓ lsp · ☾ main        Ln 5, Col 3</pre>
                 </div>
                 <p class="figcaption">A glyph sketch of the idea — not a screenshot.</p>
               </div>
@@ -295,23 +300,25 @@
                 <h3 id="kitten-title">Kitten</h3>
                 <p class="project-kicker">a small language learning to compile itself</p>
                 <p>
-                  Kitten is a statically typed, garbage-collected language that compiles to
-                  native executables. The source shape comes from C#, the smallness and tooling
-                  culture from Go, and the ecosystem ambition from Rust. The command-line tool
-                  is called <span class="mono">purr</span>; the files are
+                  Kitten is a statically typed, garbage-collected language that compiles
+                  ahead-of-time to a real executable — not interpreted, not a bytecode VM.
+                  The syntax shape comes from C#, the smallness and tooling culture from Go,
+                  the ecosystem ambition from Rust. The command-line tool is called
+                  <span class="mono">purr</span>; the files are
                   <span class="mono">.ktn</span>.
                 </p>
                 <p>
-                  The compiler is written in Go and emits C, which the host C compiler turns
-                  into a binary. A second compiler, written in Kitten, is being built one stage
-                  at a time and checked against the Go reference. It has reached the C-level
-                  fixpoint: stages 1, 2, and 3 emit byte-identical C. Go still builds stage 1,
-                  so this is a precise milestone — not a claim that the bootstrap is gone.
+                  There is no null, no undefined behavior, no implicit conversions, and
+                  every match is exhaustive. The compiler is written in Go and emits C, which
+                  the host C compiler turns into a binary. A second compiler, written in
+                  Kitten, is being built one stage at a time and checked against the Go
+                  reference — and it has reached the C-level fixpoint: stages 1, 2, and 3
+                  emit byte-identical C.
                 </p>
                 <ul class="detail-list">
-                  <li><span aria-hidden="true">✦</span> <span class="mono">SPEC.md</span> is the source of truth; semantics are not silently invented in code.</li>
-                  <li><span aria-hidden="true">✦</span> Differential harnesses compare the self-hosted stages against the Go implementation.</li>
-                  <li><span aria-hidden="true">✦</span> The toolchain is GPL-3.0-or-later; the runtime is MIT, so compiled programs stay yours.</li>
+                  <li><span aria-hidden="true">✦</span> <span class="mono">SPEC.md</span> is the source of truth; undecided things are listed as undecided rather than quietly invented in code.</li>
+                    <li><span aria-hidden="true">✦</span> Differential harnesses compare every stage against the Go reference across thousands of inputs — plus 11,158 generated-program runs under GCC and Clang.</li>
+                    <li><span aria-hidden="true">✦</span> The toolchain is GPL-3.0-or-later; the runtime is MIT — the code you write in Kitten stays yours.</li>
                 </ul>
                 <div class="project-foot">
                   <ul class="tech-list" aria-label="Kitten technologies">
@@ -324,21 +331,23 @@
               <div class="project-visual">
                 <div class="term term-kitten">
                   <div class="term-bar"><span class="term-title">kitten</span><span>hello.ktn → native</span></div>
-                  <pre role="img" aria-label="A stylized pipeline sketch: a Kitten source file passes through lexer, parser, checker and codegen, producing C and then a native binary. Three self-hosting stages produce byte-identical C.">
-      <span class="term-accent">hello.ktn</span>
-          │
-          ▼
-  ┌────────┐   ┌────────┐   ┌─────────┐
-  │ lexer  │──▶│ parser │──▶│ checker │
-  └────────┘   └────────┘   └─────────┘
-                                 │
-                                 ▼
-                            ┌─────────┐
-                            │ codegen │──▶ <span class="term-mint">hello</span>
-                            └─────────┘
+                  <pre role="img" aria-label="A stylized pipeline sketch: purr compiles a Kitten source file through lexer, parser, checker and codegen, emits C, and a host C compiler produces the native binary. Three self-hosting stages produce byte-identical C.">
+  <span class="term-accent">$ purr run hello.ktn</span>
 
-   go ref ──▶ s1 ──▶ s2 ──▶ s3
-     <span class="term-pink">same C, byte for byte</span></pre>
+        <span class="term-accent">hello.ktn</span>
+            │
+            ▼
+    ┌────────┐   ┌────────┐   ┌─────────┐
+    │ lexer  │──▶│ parser │──▶│ checker │
+    └────────┘   └────────┘   └─────────┘
+                                   │
+                                   ▼
+                              ┌─────────┐
+                              │ codegen │──▶ <span class="term-mint">hello</span>
+                              └─────────┘
+
+    go ref ──▶ s1 ──▶ s2 ──▶ s3
+      <span class="term-pink">same C, byte for byte</span></pre>
                 </div>
                 <p class="figcaption">The self-hosting path, reduced to its shape.</p>
               </div>
@@ -354,22 +363,23 @@
                 <h3 id="vynl-title">vynl</h3>
                 <p class="project-kicker">a DJ booth that fits in your terminal</p>
                 <p>
-                  vynl turns a local music folder into a live console: a rotating vinyl deck, a
-                  real FFT spectrum analyzer, stereo meters, and independent tempo, pitch,
-                  volume, and 3-band EQ controls. It plays MP3, FLAC, WAV, and OGG without a
-                  browser, a GUI, or a service in the middle.
+                  vynl turns a local music folder into a live console: a rotating vinyl
+                  rendered from real coordinate geometry rather than ASCII templates, a real
+                  FFT spectrum, stereo meters, independent tempo and pitch, and a three-band
+                  EQ. It plays MP3, FLAC, WAV, and OGG without a browser, a GUI, or a
+                  service in the middle.
                 </p>
                 <p>
-                  Under the deck is a serious audio engine. A bounded PCM ring keeps memory
-                  flat, gapless playback keeps one output stream alive across tracks, and an
-                  optional equal-power crossfade joins them. Playlists are plain M3U8 files.
-                  The terminal paints no background, so your own theme and transparency show
-                  through.
+                  Under the deck is a serious audio engine. A bounded four-second PCM ring
+                  keeps memory flat; gapless playback joins tracks inside the same audio
+                  callback; an optional equal-power crossfade bridges them. The EQ is a
+                  Linkwitz-Riley three-way crossover, and a flat EQ stays exactly
+                  transparent. Playlists are plain M3U8 files.
                 </p>
                 <ul class="detail-list">
-                  <li><span aria-hidden="true">✦</span> A 1024-point FFT, Hann-windowed, mapped to 48 log-spaced bands with peak hold.</li>
-                  <li><span aria-hidden="true">✦</span> Tempo and pitch move independently; vinyl mode couples them like a turntable.</li>
-                  <li><span aria-hidden="true">✦</span> Live ReplayGain, crossfade, EQ, shuffle and repeat without restarting playback.</li>
+                  <li><span aria-hidden="true">✦</span> A 1024-point Hann-windowed FFT mapped to 48 log-spaced bands, with peak-hold markers.</li>
+                    <li><span aria-hidden="true">✦</span> Vinyl mode couples tempo and pitch like a turntable; ReplayGain, crossfade and EQ apply live, without restarting playback.</li>
+                    <li><span aria-hidden="true">✦</span> vynl never paints a background colour — your terminal's theme and opacity show through. Built for terminals, not for windows.</li>
                 </ul>
                 <div class="project-foot">
                   <ul class="tech-list" aria-label="vynl technologies">
@@ -382,17 +392,18 @@
               <div class="project-visual">
                 <div class="term term-vynl">
                   <div class="term-bar"><span class="term-title">vynl</span><span>deck · 33⅓</span></div>
-                  <pre role="img" aria-label="A stylized sketch of vynl: an ASCII turntable, three spectrum bars, and tempo, pitch and volume readouts.">
-        .-~~~~~~~~~~~~-.
-      .'   ╭────────╮   '.
-     /    /  ░░░░░░  \    \
-    |    |  ░░██░░░░ |    |
-    |    |  ░░██░░░░ |    |
-     \    \  ░░░░░░  /    /
-      '.   ╰────────╯   .'
-        '-~~~~~~~~~~~~-'
+                  <pre role="img" aria-label="A stylized sketch of vynl: a round ASCII turntable with a spinning label, crossfade and ReplayGain indicators, three live spectrum bars, and tempo, pitch and volume readouts.">
+          _.───────────._
+        .'     ╭────╮    '.
+       /      ╱ ░░░░ ╲      \
+      |      | ░░██░░ |      |   <span class="term-mint">XFADE 8s</span>
+      |      | ░░██░░ |      |   <span class="term-dim">RG · TRACK</span>
+       \      ╲ ░░░░ ╱      /
+        '.     ╰────╯    .'
+          '─..________..─'
+
    <span class="term-mint spec">▂▄▆█▆▄▂</span>   <span class="term-mint spec">▂▄▆█▆▄▂</span>   <span class="term-mint spec">▂▄▆█▆▄▂</span>
-   tempo 1.00×  pitch +0  vol 76</pre>
+   tempo 1.00×   pitch +0   vol 76</pre>
                 </div>
                 <p class="figcaption">A record, a spectrum, and a very small dance floor.</p>
               </div>
@@ -408,23 +419,24 @@
                 <h3 id="grimmoire-title">Grimmoire</h3>
                 <p class="project-kicker">a dark-fantasy world drawn entirely in glyphs</p>
                 <p>
-                  Grimmoire is an ASCII-first RPG set in a village that survived a drought by
-                  feeding the water, and a shrine that has spent four hundred years making sure
-                  nobody finishes the sentence that would end it. You explore six connected
-                  places, talk to nine characters, keep a journal of what you discover, and
-                  solve one puzzle written on the floor.
+                  Grimmoire is an ASCII-first RPG set in a village that survived a drought
+                  by feeding the water, and a shrine that has spent four hundred years making
+                  sure nobody finishes the sentence that would end it. The wizard arrives
+                  nine years after the water stopped coming back. Six connected places, nine
+                  characters, twelve journal entries, and one puzzle whose rules are written
+                  on the floor.
                 </p>
                 <p>
-                  The renderer is the project. Every wall, candle, and face is a cell in a grid
-                  that Grimmoire owns. Walls get lit caps and shadowed bases from their
-                  neighbours; floors are textured by world position so they never shimmer;
-                  light falls off with distance. Even the cast is source text — seven cells
-                  wide, five tall, eight inks — with no image files underneath.
+                  The renderer is the project. Walls read their neighbours and show lit
+                  caps or shadowed bases; floors are textured from world position so they
+                  never shimmer; light falls off with distance. Conversations branch on what
+                  you know and what you have done — and two choices change a place, not just
+                  a line.
                 </p>
                 <ul class="detail-list">
-                  <li><span aria-hidden="true">✦</span> Branching conversations remember what you asked, refused, or pressed.</li>
-                  <li><span aria-hidden="true">✦</span> Discoveries change what characters say, and sometimes change the room itself.</li>
-                  <li><span aria-hidden="true">✦</span> Runs in Kitty at 80×24 or larger; below that it suspends rather than draws noise.</li>
+                  <li><span aria-hidden="true">✦</span> No image files, no sprites, no graphics protocol — just glyphs, ink, and light.</li>
+                    <li><span aria-hidden="true">✦</span> A scavenger who is lying, a priestess who answers obliquely, something in the catacombs that resents being awake — every character remembers what you asked.</li>
+                    <li><span aria-hidden="true">✦</span> Runs in Kitty at 80×24 or larger; below that it says so and suspends rather than draw noise.</li>
                 </ul>
                 <div class="project-foot">
                   <ul class="tech-list" aria-label="Grimmoire technologies">
@@ -437,13 +449,17 @@
               <div class="project-visual">
                 <div class="term term-grimmoire">
                   <div class="term-bar"><span class="term-title">grimmoire</span><span>ruined chapel</span></div>
-                  <pre role="img" aria-label="A stylized sketch of an ASCII game scene: a wizard standing in a lit stone room with a candle and moonlight.">
-   <span class="term-dim">░░░░░░░░░░░░░░░░░░░░░░░░░</span>
-   <span class="term-dim">░</span>   <span class="term-pink flicker">▄▄</span>        <span class="term-dim">·</span>      <span class="term-pink flicker">▄</span>   <span class="term-dim">░</span>
-   <span class="term-dim">░</span>  <span class="term-pink flicker">████</span>     <span class="term-mint mage">@</span>       <span class="term-pink flicker">██</span>   <span class="term-dim">░</span>
-   <span class="term-dim">░</span>   <span class="term-pink flicker">██</span>     <span class="term-mint mage">/|\</span>   <span class="term-dim">░</span>  <span class="term-pink flicker">██</span>   <span class="term-dim">░</span>
-   <span class="term-dim">░</span>          <span class="term-mint mage">/ \</span>  <span class="term-dim">░░░</span>      <span class="term-dim">░</span>
-   <span class="term-dim">░░░░░░░░░░░░░░░░░░░░░░░░░</span>
+                  <pre role="img" aria-label="A stylized sketch of an ASCII game scene: a wizard standing between two flickering braziers in a lit stone chapel, with a moonwell motif on the floor.">
+   <span class="term-dim">░░░░░░░░░░░░░░░░░░░░░░░░░░░</span>
+   <span class="term-dim">░</span>                        <span class="term-dim">░</span>
+   <span class="term-dim">░</span>   <span class="term-pink flicker">▄▄</span>          ·    <span class="term-pink flicker">▄▄</span>  <span class="term-dim">░</span>
+   <span class="term-dim">░</span>  <span class="term-pink flicker">▐██▌</span>        <span class="term-mint mage">@</span>    <span class="term-pink flicker">██</span>   <span class="term-dim">░</span>
+   <span class="term-dim">░</span>   <span class="term-pink flicker">██</span>        <span class="term-mint mage">/|\</span>        <span class="term-dim">░</span>
+   <span class="term-dim">░</span>              <span class="term-mint mage">/ \</span>        <span class="term-dim">░</span>
+   <span class="term-dim">░</span>    ·   <span class="term-pink flicker">▄▄▄▄</span>    <span class="term-pink flicker">▄▄▄▄</span>    <span class="term-dim">░</span>
+   <span class="term-dim">░</span>        <span class="term-pink">════</span>    <span class="term-pink">════</span>    <span class="term-dim">░</span>
+   <span class="term-dim">░</span>                        <span class="term-dim">░</span>
+   <span class="term-dim">░░░░░░░░░░░░░░░░░░░░░░░░░░░</span>
      <span class="term-accent">the chapel remembers.</span></pre>
                 </div>
                 <p class="figcaption">A glyph sketch of the chapel — not a screenshot.</p>
@@ -616,13 +632,16 @@
     <div class="shell">
       <div class="footer-top">
         <pre class="footer-art" aria-hidden="true">
-      <span class="art-stars">✦        .            ☾</span>
-   <span class="art-sill">────────────────────────────────</span>
-<span class="art-cat">        /\_/\
-       (<span id="footer-face"> -.- </span>)      zzZ
-        &gt; ^ &lt;
-      __/   \__</span>
-     /_/     \_\
+<span class="art-stars">    ✦          ·          ☾       </span>
+<span class="art-cat">             /\___/\
+            (  -ω-  )      z
+              &gt; ω &lt;        z
+             /|    |\
+            / |    | \
+               |____|</span>
+<span class="art-sill">  ______________________________
+ | etokiyra · midnight         ✦ |
+ |______________________________|</span>
         </pre>
 
         <div class="footer-copy">

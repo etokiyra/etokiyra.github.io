@@ -637,6 +637,11 @@ pre,
   color: var(--pink);
 }
 
+.art-heart {
+  color: var(--pink);
+  text-shadow: 0 0 10px rgba(239, 167, 200, 0.45);
+}
+
 .art-cat {
   color: var(--lav);
   text-shadow: 0 0 16px rgba(201, 184, 244, 0.18);
@@ -667,33 +672,6 @@ pre,
   font-family: var(--mono);
   font-size: 9.5px;
   letter-spacing: 0.025em;
-}
-
-.pet-button {
-  flex: none;
-  padding: 6px 9px;
-  border: 1px solid var(--line-strong);
-  border-radius: 2px;
-  background: transparent;
-  color: var(--lav);
-  font-family: var(--mono);
-  font-size: 9.5px;
-  line-height: 1.2;
-  cursor: pointer;
-  transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    color 160ms ease;
-}
-
-.pet-button:hover {
-  border-color: var(--pink);
-  background: rgba(239, 167, 200, 0.08);
-  color: var(--pink);
-}
-
-.pet-button:active {
-  transform: translateY(1px);
 }
 
 .pet-sparks {
@@ -1554,6 +1532,76 @@ html.js .mascot-art {
 }
 
 /* --------------------------------------------------------------------------
+   Care row: pet, feed, play, groom, laser
+   -------------------------------------------------------------------------- */
+
+.care-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.care-button {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--lav);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 120ms ease;
+}
+
+.care-button span[aria-hidden] {
+  pointer-events: none;
+}
+
+.care-button:hover {
+  border-color: var(--pink);
+  background: rgba(239, 167, 200, 0.08);
+  color: var(--pink);
+}
+
+.care-button[data-care="feed"]:hover {
+  border-color: var(--mint);
+  background: rgba(159, 230, 196, 0.08);
+  color: var(--mint);
+}
+
+.care-button[data-care="play"]:hover {
+  border-color: var(--gold);
+  background: rgba(241, 214, 164, 0.08);
+  color: var(--gold);
+}
+
+.care-button[data-care="laser"]:hover {
+  border-color: #ff5d8f;
+  background: rgba(255, 93, 143, 0.08);
+  color: #ff5d8f;
+}
+
+.care-button:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+.care-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* --------------------------------------------------------------------------
    Ambience: cursor glow, sparks, shooting stars, lamp
    -------------------------------------------------------------------------- */
 
@@ -1599,24 +1647,48 @@ body.is-lit .lamp {
   z-index: 45;
   color: var(--lav);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1;
   pointer-events: none;
   opacity: 0;
-  animation: spark-pop 800ms ease-out forwards;
+  animation: spark-pop 900ms cubic-bezier(0.16, 0.84, 0.3, 1) forwards;
 }
 
 @keyframes spark-pop {
   0% {
     opacity: 0;
-    transform: translate(0, 0) scale(0.6) rotate(0deg);
+    transform: translate(0, 0) scale(0.4) rotate(0deg);
   }
-  15% {
+  16% {
     opacity: 1;
   }
   100% {
     opacity: 0;
-    transform: translate(var(--dx, 0px), -36px) scale(1.05) rotate(var(--rot, 60deg));
+    transform: translate(var(--dx, 0px), var(--dy, -44px)) scale(1.25) rotate(var(--rot, 80deg));
+  }
+}
+
+.click-ring {
+  position: fixed;
+  z-index: 44;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border: 1px solid rgba(201, 184, 244, 0.65);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  animation: ring-pop 640ms ease-out forwards;
+}
+
+@keyframes ring-pop {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.4);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(5.2);
   }
 }
 
@@ -1835,6 +1907,27 @@ html.js .art-moon {
     opacity: 0;
     transform: translateY(0) rotate(0deg);
   }
+}
+
+.feather {
+  position: absolute;
+  z-index: 3;
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow: 0 0 8px rgba(241, 214, 164, 0.5);
+  animation: feather-swing 2.2s ease-in-out forwards;
+}
+
+@keyframes feather-swing {
+  0% { left: 14%; top: 16%; opacity: 0; transform: rotate(-14deg); }
+  10% { opacity: 1; }
+  30% { left: 30%; top: 22%; transform: rotate(10deg); }
+  55% { left: 48%; top: 15%; transform: rotate(-10deg); }
+  80% { left: 64%; top: 24%; transform: rotate(12deg); opacity: 1; }
+  100% { left: 72%; top: 18%; opacity: 0; transform: rotate(-8deg); }
 }
 
 .laser-dot {
@@ -2480,7 +2573,7 @@ html.js .reveal.in .prose h2::after {
   .site-header,
   .hero-stars,
   .pet-sparks,
-  .pet-button,
+  .care-row,
   .stage-note,
   .skip-link {
     display: none !important;
@@ -2495,14 +2588,17 @@ html.js .reveal.in .prose h2::after {
   }
 
   .mascot-console,
+  .care-row,
   .scroll-progress,
   .cursor-glow,
   .click-spark,
+  .click-ring,
   .star-rain,
   .lamp,
   .shooting-star,
   .float-note,
   .fish,
+  .feather,
   .laser-dot,
   .box-particle {
     display: none !important;
