@@ -1875,7 +1875,8 @@ body.is-lit .lamp {
    Terminal toys: tilt, spectrum, candlelight
    -------------------------------------------------------------------------- */
 
-.term.is-tilting {
+.term.is-tilting,
+.side-card.is-tilting {
   transition: border-color 220ms ease, transform 90ms ease-out;
   will-change: transform;
 }

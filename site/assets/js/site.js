@@ -1564,7 +1564,7 @@
 
   const initToys = () => {
     if (finePointer.matches && motionOK()) {
-      $$(".term").forEach((term) => {
+      $$(".term, .side-card").forEach((term) => {
         term.addEventListener("pointermove", (event) => {
           const rect = term.getBoundingClientRect();
           const px = (event.clientX - rect.left) / rect.width - 0.5;
