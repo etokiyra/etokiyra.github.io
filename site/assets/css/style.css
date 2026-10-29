@@ -1876,7 +1876,8 @@ body.is-lit .lamp {
    -------------------------------------------------------------------------- */
 
 .term.is-tilting,
-.side-card.is-tilting {
+.side-card.is-tilting,
+html.js .side-card.is-tilting {
   transition: border-color 220ms ease, transform 90ms ease-out;
   will-change: transform;
 }
