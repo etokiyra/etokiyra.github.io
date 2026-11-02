@@ -863,7 +863,7 @@
    * ------------------------------------------------------------------ */
 
   const files = {
-    koda: "an IDE that arrives already knowing the language. rust, built-in lsp, zero config.",
+    kemori: "an IDE that arrives already knowing the language. rust, built-in lsp, zero config.",
     kitten: "a small language learning to compile itself. go + c; the tool is purr, the files are .ktn.",
     vynl: "a dj booth in your terminal. fft spectrum, vinyl mode, gapless playback. no browser required.",
     grimmoire: "an ascii-first rpg in a village that survived by feeding the water. rust, all glyphs.",
@@ -873,7 +873,7 @@
   };
 
   const targets = {
-    koda: "#koda",
+    kemori: "#kemori",
     kitten: "#kitten",
     vynl: "#vynl",
     grimmoire: "#grimmoire",
@@ -940,9 +940,9 @@
       ],
     },
     {
-      match: /\b(koda|kitten|vynl|grimmoire)\b/,
+      match: /\b(kemori|kitten|vynl|grimmoire)\b/,
       lines: [
-        "suzu: koda? the polite one. opens doors for languages.",
+        "suzu: kemori? the polite one. opens doors for languages.",
         "suzu: kitten compiles itself. i supervise. mostly i sit on the spec.",
         "suzu: vynl goes brrr correctly. 1024-point fft. i checked.",
         "suzu: grimmoire is the dark forest story. i am technically in it. as a shadow.",
@@ -1065,7 +1065,7 @@
           "  help        — this list",
           "  whoami      — who is kiyra",
           "  ls          — look around",
-          "  cat <name>  — read: koda, kitten, vynl, grimmoire, suzu, ~/.why",
+          "  cat <name>  — read: kemori, kitten, vynl, grimmoire, suzu, ~/.why",
           "  open <name> — jump to a project or section",
           "  talk <...>  — actually talk to suzu. she has opinions.",
           "  ask <...>   — ask suzu anything. answers are legally binding.",
@@ -1090,7 +1090,7 @@
       whois: () => commands.whoami(),
       ls: () => {
         asleepNote();
-        return "koda/  kitten/  vynl/  grimmoire/  suzu  ~/.why";
+        return "kemori/  kitten/  vynl/  grimmoire/  suzu  ~/.why";
       },
       pwd: () => {
         asleepNote();
@@ -1099,7 +1099,7 @@
       uname: () => "midnight/1.0 kiyra.lol tty/01 — quiet, dark, keyboard-first.",
       cat: (args) => {
         const name = (args[0] || "").toLowerCase();
-        if (!name) return "cat what? try: cat koda";
+        if (!name) return "cat what? try: cat kemori";
         const file = files[name] || files[args.join(" ")];
         if (!file) return `no such file: ${name}. try: ls`;
         asleepNote();
@@ -1257,9 +1257,9 @@
       coffee: () => "suzu doesn't brew. she naps next to the machine while it does.",
       sudo: () => "suzu does not accept root from strangers.",
       rm: () => "nice try. suzu guards this filesystem with her life.",
-      vim: () => "suzu uses koda, obviously.",
-      emacs: () => "suzu uses koda, obviously.",
-      nano: () => "suzu uses koda, obviously.",
+      vim: () => "suzu uses kemori, obviously.",
+      emacs: () => "suzu uses kemori, obviously.",
+      nano: () => "suzu uses kemori, obviously.",
       man: () => "this console has exactly one page: help.",
       name: () => "suzu. terminal familiar. first of her name. keeper of the windowsill.",
       exit: () => {

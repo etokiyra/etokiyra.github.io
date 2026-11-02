@@ -4,7 +4,7 @@ The source for [kiyra.lol](https://kiyra.lol/): a single-page
 personal site for **kiyra** (`etokiyra`), built around a midnight terminal
 bedroom, a star-cat called Suzu who keeps real predator hours and answers to
 care buttons, and four real projects. Suzu is drawn in the same visual
-vocabulary as Koda's familiar (`/\___/\`, `ω` mouth, `✦` stars, `☾` moon).
+vocabulary as Kemori's familiar (`/\___/\`, `ω` mouth, `✦` stars, `☾` moon).
 The site is served by GitHub Pages from the `etokiyra.github.io`
 repository, with `site/CNAME` pinning the custom domain.
 
@@ -87,7 +87,7 @@ nothing to compile.
 ## Editing content
 
 - **Page copy and project descriptions:** `site/index.html`. Each featured project
-  is an `<article>` with an `id` (`koda`, `kitten`, `vynl`, `grimmoire`).
+  is an `<article>` with an `id` (`kemori`, `kitten`, `vynl`, `grimmoire`).
 - **Colours, type, spacing, responsive rules:** the custom properties at the top of
   `site/assets/css/style.css`.
 - **Suzu's messages, her console commands, and the active nav link:**
