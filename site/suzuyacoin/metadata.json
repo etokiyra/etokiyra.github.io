@@ -1,0 +1,25 @@
+{
+  "name": "Suzuyacoin",
+  "symbol": "SUZC",
+  "description": "Suzuyacoin (SUZC) is a personal play-money token. Supply = (NVIDIA market cap - AMD market cap) x USD/EUR on 2026-11-09. No monetary value. No investment. No promises.",
+  "image": "https://kiyra.lol/suzuyacoin/logo.png",
+  "external_url": "",
+  "attributes": [
+    {
+      "trait_type": "Supply",
+      "value": "3358699259850"
+    },
+    {
+      "trait_type": "Decimals",
+      "value": "6"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Play money"
+    },
+    {
+      "trait_type": "Snapshot",
+      "value": "2026-11-09"
+    }
+  ]
+}
