@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /lost+found/
 
 Sitemap: https://kiyra.lol/sitemap.xml

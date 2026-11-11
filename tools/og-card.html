@@ -4,16 +4,24 @@
 <meta charset="utf-8">
 <title>kiyra — social card</title>
 <style>
+  @font-face {
+    font-family: "JetBrains Mono";
+    font-style: normal;
+    font-weight: 100 800;
+    font-display: block;
+    src: url("../site/assets/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");
+  }
   :root {
-    --ink: #070810;
-    --text: #ece8f7;
-    --muted: #a49dbd;
-    --dim: #8d86a8;
-    --lav: #c9b8f4;
-    --pink: #efa7c8;
-    --mint: #9fe6c4;
-    --gold: #f1d6a4;
-    --line: rgba(201, 184, 244, 0.18);
+    --ink: #050506;
+    --text: #f5f3f8;
+    --muted: #ada8b6;
+    --dim: #7f7a88;
+    --lav: #c96b72;
+    --pink: #ff5a5f;
+    --mint: #f5f5f5;
+    --red: #e5484d;
+    --gold: #e0bcbc;
+    --line: rgba(255, 255, 255, 0.16);
     --mono: "JetBrains Mono", "Cascadia Code", "SFMono-Regular", ui-monospace,
       Menlo, Consolas, "DejaVu Sans Mono", monospace;
     --sans: "Inter", "Avenir Next", "Segoe UI", system-ui, sans-serif;
@@ -28,9 +36,12 @@
   body {
     padding: 42px 52px 34px;
     background:
-      radial-gradient(ellipse 60% 50% at 12% 0%, rgba(140, 123, 217, 0.2), transparent 68%),
-      radial-gradient(ellipse 36% 40% at 91% 12%, rgba(239, 167, 200, 0.1), transparent 72%),
+      linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+      radial-gradient(ellipse 60% 50% at 12% 0%, rgba(229, 72, 77, 0.14), transparent 68%),
+      radial-gradient(ellipse 36% 40% at 91% 12%, rgba(255, 77, 94, 0.09), transparent 72%),
       var(--ink);
+    background-size: 72px 72px, 72px 72px, auto, auto, auto;
     color: var(--text);
     font-family: var(--sans);
   }
@@ -48,8 +59,8 @@
     height: 100%;
     padding: 26px 34px 24px;
     border: 1px solid var(--line);
-    background: linear-gradient(165deg, rgba(18, 22, 41, 0.88), rgba(8, 10, 18, 0.92));
-    box-shadow: 10px 10px 0 rgba(201, 184, 244, 0.04);
+    background: linear-gradient(165deg, rgba(22, 22, 27, 0.9), rgba(7, 7, 9, 0.94));
+    box-shadow: 10px 10px 0 rgba(201, 107, 114, 0.06);
   }
   header {
     display: flex;
@@ -63,7 +74,7 @@
     letter-spacing: 0.06em;
   }
   header .brand { color: var(--text); font-size: 16px; }
-  header .brand span { color: var(--pink); }
+  header .brand span { color: var(--red); }
   header .path { color: var(--muted); }
   main {
     display: grid;
@@ -95,7 +106,7 @@
     text-decoration-style: wavy;
     text-decoration-thickness: 1px;
     text-underline-offset: 7px;
-    text-decoration-color: rgba(239, 167, 200, 0.55);
+    text-decoration-color: rgba(255, 90, 95, 0.55);
   }
   .sub {
     margin: 0;
@@ -109,8 +120,8 @@
     align-self: center;
     border: 1px solid var(--line);
     background:
-      radial-gradient(ellipse 70% 60% at 72% 8%, rgba(201, 184, 244, 0.1), transparent 62%),
-      rgba(7, 8, 16, 0.45);
+      radial-gradient(ellipse 70% 60% at 72% 8%, rgba(122, 38, 43, 0.12), transparent 62%),
+      rgba(8, 8, 10, 0.62);
     padding: 16px 8px 12px;
   }
   pre {
@@ -146,8 +157,8 @@
     font-size: 11px;
     letter-spacing: 0.05em;
   }
-  footer .link { color: var(--lav); }
-  footer .mark { color: var(--pink); }
+  footer .link { color: var(--pink); }
+  footer .mark { color: var(--red); }
 </style>
 </head>
 <body>
@@ -161,7 +172,7 @@
     <main>
       <div>
         <p class="eyebrow">compilers · terminal tools · small worlds</p>
-        <h1>Some people<br>decorate a room.<br><em>I decorate a prompt.</em></h1>
+        <h1>Compilers, tools,<br>and small worlds<br><em>for the terminal.</em></h1>
         <p class="sub"><b>Kemori</b> · <b>Kitten</b> · <b>vynl</b> · <b>Grimmoire</b></p>
       </div>
 
@@ -181,7 +192,7 @@
     </main>
 
     <footer>
-      <span><span class="mark">✦</span> little worlds for the terminal</span>
+      <span><span class="mark">✦</span> systems programmer · building in public</span>
       <span class="link">kiyra.lol</span>
     </footer>
   </div>

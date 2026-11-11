@@ -9,6 +9,7 @@ Thumbs.db
 node_modules/
 _site/
 _site-preview/
+site/_preview*
 
 # Local scratch files
 *.local

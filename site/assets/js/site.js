@@ -868,6 +868,9 @@
     vynl: "a dj booth in your terminal. fft spectrum, vinyl mode, gapless playback. no browser required.",
     grimmoire: "an ascii-first rpg in a village that survived by feeding the water. rust, all glyphs.",
     suzu: "your terminal familiar. keeps predator hours. likes: boxes, the moon, and you (probably).",
+    signal: "the live feed: releases, commits, and every other public repo. updated from github.",
+    contact: "github is the open channel. issues, pull requests, or a repo that does something strange.",
+    "lost+found": "a door that is not in the sitemap. /lost+found — suzu pretends not to know.",
     "~/.why":
       "to understand the machine\nfrom the inside out.\nthen make it a little kinder.",
   };
@@ -879,8 +882,12 @@
     grimmoire: "#grimmoire",
     about: "#about",
     projects: "#projects",
+    work: "#projects",
     interests: "#interests",
+    stack: "#interests",
+    signal: "#signal",
     notes: "#notes",
+    contact: "#contact",
     top: "#top",
     home: "#top",
   };
@@ -1075,6 +1082,7 @@
           "  lights      — toggle the lamp",
           "  mood        — how suzu is doing (always fine)",
           "  stats       — the friendship ledger",
+          "  achievements — the things you found in the dark",
           "  schedule    — suzu's day, hour by hour",
           "  date        — the time, cat-adjusted",
           "  clear       — clean the console",
@@ -1090,7 +1098,7 @@
       whois: () => commands.whoami(),
       ls: () => {
         asleepNote();
-        return "kemori/  kitten/  vynl/  grimmoire/  suzu  ~/.why";
+        return "kemori/  kitten/  vynl/  grimmoire/  signal/  contact/  suzu  ~/.why";
       },
       pwd: () => {
         asleepNote();
@@ -1229,6 +1237,10 @@
           `  right now: ${current.name} (${current.asleep ? "asleep" : "awake"})`,
         ].forEach((lineText) => print(lineText, "c-ok"));
         return null;
+      },
+      achievements: () => {
+        window.dispatchEvent(new CustomEvent("kiyra:achievements"));
+        return "opening the trophy shelf. mind the dust.";
       },
       schedule: () => {
         SCHEDULE.forEach((slot) => {
@@ -1415,6 +1427,16 @@
     );
 
     items.forEach((el) => io.observe(el));
+
+    /* Keyboard users should never tab into an invisible reveal. */
+    document.addEventListener(
+      "focusin",
+      (event) => {
+        const target = event.target instanceof Element ? event.target : null;
+        target?.closest(".reveal")?.classList.add("in");
+      },
+      true
+    );
   };
 
   /* ------------------------------------------------------------------ *
@@ -1461,10 +1483,10 @@
     document.body.append(main);
     main.addEventListener("animationend", () => main.remove());
 
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 0; i < 2; i += 1) {
       const spark = document.createElement("span");
       spark.className = "click-spark";
-      spark.textContent = pick(["✦", "✧", "·", "♡"]);
+      spark.textContent = pick(["✦", "·"]);
       spark.style.left = `${x}px`;
       spark.style.top = `${y}px`;
       spark.style.color = pick(["var(--lav)", "var(--pink)", "var(--mint)", "var(--gold)"]);
@@ -1571,8 +1593,8 @@
           const py = (event.clientY - rect.top) / rect.height - 0.5;
           term.classList.add("is-tilting");
           term.style.transform =
-            `perspective(700px) rotateX(${(-py * 4).toFixed(2)}deg) ` +
-            `rotateY(${(px * 5).toFixed(2)}deg)`;
+            `perspective(900px) rotateX(${(-py * 2).toFixed(2)}deg) ` +
+            `rotateY(${(px * 2.5).toFixed(2)}deg)`;
         });
         term.addEventListener("pointerleave", () => {
           term.classList.remove("is-tilting");
