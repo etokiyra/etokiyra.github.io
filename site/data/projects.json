@@ -1,0 +1,334 @@
+{
+  "owner": "etokiyra",
+  "generatedAt": "2026-11-11T11:29:31.356Z",
+  "source": "https://github.com/etokiyra",
+  "spotlight": {
+    "name": "kemori",
+    "description": "Kemori: a zero-configuration, terminal-native IDE.",
+    "url": "https://github.com/etokiyra/kemori"
+  },
+  "featured": [
+    {
+      "name": "kemori",
+      "description": "Kemori: a zero-configuration, terminal-native IDE.",
+      "url": "https://github.com/etokiyra/kemori",
+      "homepage": "https://github.com/etokiyra/kemori",
+      "language": "Rust",
+      "license": "MPL-2.0",
+      "topics": [
+        "code-editor",
+        "cross-platform",
+        "developer-tools",
+        "editor",
+        "ide",
+        "kemori",
+        "keyboard-driven",
+        "language-server"
+      ],
+      "defaultBranch": "master",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-10-02T19:23:49Z",
+      "pushedAt": "2026-11-07T17:54:05Z",
+      "latestRelease": {
+        "tag": "v3.2.1",
+        "title": "Kemori 3.2.1",
+        "date": "2026-11-04T21:45:07Z",
+        "url": "https://github.com/etokiyra/kemori/releases/tag/v3.2.1",
+        "notes": "Kemori 3.2.1 Patch release for the 3.2.0 feature set. Fixed - The tool-provisioning test no longer expects a managed netcoredbg install on musl. The Linux netcoredbg archive links glibc/libstdc++, so musl builds intentionally have no install plan; the…"
+      },
+      "releases": [
+        {
+          "tag": "v3.2.1",
+          "title": "Kemori 3.2.1",
+          "date": "2026-11-04T21:45:07Z",
+          "url": "https://github.com/etokiyra/kemori/releases/tag/v3.2.1",
+          "notes": "Kemori 3.2.1 Patch release for the 3.2.0 feature set. Fixed - The tool-provisioning test no longer expects a managed netcoredbg install on musl. The Linux netcoredbg archive links glibc/libstdc++, so musl builds intentionally have no install plan; the…"
+        },
+        {
+          "tag": "v3.2.0",
+          "title": "Kemori 3.2.0",
+          "date": "2026-11-04T21:27:29Z",
+          "url": "https://github.com/etokiyra/kemori/releases/tag/v3.2.0",
+          "notes": "Kemori 3.2.0 Kemori is a zero-configuration, terminal-native IDE. Open a project and start coding: language detection, provisioned language servers and tools, editing, search, git, debugging and a real terminal in one binary. Highlights since 3.1.0 -…"
+        },
+        {
+          "tag": "v3.1.0",
+          "title": "Kemori 3.1.0",
+          "date": "2026-11-02T16:46:43Z",
+          "url": "https://github.com/etokiyra/kemori/releases/tag/v3.1.0",
+          "notes": "Full Changelog: https://github.com/etokiyra/kemori/compare/v3.0.0...v3.1.0"
+        }
+      ],
+      "latestCommit": {
+        "sha": "9b5215b",
+        "message": "feat(debug): launch Swift through lldb-dap",
+        "date": "2026-11-07T17:53:58Z",
+        "url": "https://github.com/etokiyra/kemori/commit/9b5215b29d9d94974a8e620b92db92ebc4283fad"
+      }
+    },
+    {
+      "name": "kitten",
+      "description": "A small, statically typed, garbage-collected language that compiles to native code — with a self-hosting compiler in progress.",
+      "url": "https://github.com/etokiyra/kitten",
+      "homepage": "",
+      "language": "Go",
+      "license": "GPL-3.0",
+      "topics": [
+        "code-generation",
+        "compiler",
+        "garbage-collector",
+        "language-design",
+        "programming-language",
+        "self-hosting"
+      ],
+      "defaultBranch": "main",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-10-16T21:19:11Z",
+      "pushedAt": "2026-10-31T01:21:56Z",
+      "latestRelease": null,
+      "releases": [],
+      "latestCommit": {
+        "sha": "61b41ca",
+        "message": "docs: render bottom cat in fenced code block for correct spacing",
+        "date": "2026-10-31T01:21:55Z",
+        "url": "https://github.com/etokiyra/kitten/commit/61b41cae124851997c22d51db19920f14736122e"
+      }
+    },
+    {
+      "name": "vynl",
+      "description": "",
+      "url": "https://github.com/etokiyra/vynl",
+      "homepage": "",
+      "language": "Go",
+      "license": "GPL-3.0",
+      "topics": [],
+      "defaultBranch": "master",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-09-27T12:18:20Z",
+      "pushedAt": "2026-10-30T08:28:33Z",
+      "latestRelease": null,
+      "releases": [],
+      "latestCommit": {
+        "sha": "db22d94",
+        "message": "fix(player): silence decoder library log lines that painted the TUI",
+        "date": "2026-10-30T08:28:30Z",
+        "url": "https://github.com/etokiyra/vynl/commit/db22d940196e3651789010009727e29c768df8e3"
+      }
+    },
+    {
+      "name": "grimmoire",
+      "description": "A terminal-native, ASCII-first dark-fantasy wizard RPG written in Rust.",
+      "url": "https://github.com/etokiyra/grimmoire",
+      "homepage": "",
+      "language": "Rust",
+      "license": "GPL-3.0",
+      "topics": [],
+      "defaultBranch": "main",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-10-11T19:39:45Z",
+      "pushedAt": "2026-10-17T09:06:15Z",
+      "latestRelease": null,
+      "releases": [],
+      "latestCommit": {
+        "sha": "f166b8d",
+        "message": "docs: bring the README up to date with the story and prologue",
+        "date": "2026-10-17T09:06:12Z",
+        "url": "https://github.com/etokiyra/grimmoire/commit/f166b8d439de0f885af272aa4646a26648eaaef7"
+      }
+    },
+    {
+      "name": "caelestia-rice",
+      "description": "Kiyra's Caelestia shell + Hyprland (Lua) rice — glass configs, olive-gold scheme, one-shot installer",
+      "url": "https://github.com/etokiyra/caelestia-rice",
+      "homepage": "",
+      "language": "Lua",
+      "license": "Unlicense",
+      "topics": [],
+      "defaultBranch": "main",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-10-28T07:15:54Z",
+      "pushedAt": "2026-10-29T16:40:02Z",
+      "latestRelease": null,
+      "releases": [],
+      "latestCommit": {
+        "sha": "2d7a2ad",
+        "message": "chore(license): release the rice into the public domain",
+        "date": "2026-10-29T16:40:00Z",
+        "url": "https://github.com/etokiyra/caelestia-rice/commit/2d7a2ad1fbf89235aacaf13657c11b113d533f31"
+      }
+    },
+    {
+      "name": "opencode-config",
+      "description": "Portable, preconfigured OpenCode setup for OpenCode Go — agents, skills, slash commands, free MCP servers, and Go-plan model assignments.",
+      "url": "https://github.com/etokiyra/opencode-config",
+      "homepage": "",
+      "language": "Shell",
+      "license": "MIT",
+      "topics": [],
+      "defaultBranch": "main",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-10-29T16:29:41Z",
+      "pushedAt": "2026-11-02T08:27:11Z",
+      "latestRelease": null,
+      "releases": [],
+      "latestCommit": {
+        "sha": "f1667cd",
+        "message": "agent changes",
+        "date": "2026-11-02T08:26:29Z",
+        "url": "https://github.com/etokiyra/opencode-config/commit/f1667cd00a1cb7a3780b151f4cd9d82f0df7a9d1"
+      }
+    }
+  ],
+  "others": [
+    {
+      "name": "bad_weather",
+      "description": "",
+      "url": "https://github.com/etokiyra/bad_weather",
+      "homepage": "",
+      "language": "Go",
+      "license": "GPL-3.0",
+      "topics": [],
+      "defaultBranch": "master",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-09-21T22:04:25Z",
+      "pushedAt": "2026-09-25T06:41:09Z"
+    },
+    {
+      "name": "bounc_ball",
+      "description": "bouncing ball pygame game",
+      "url": "https://github.com/etokiyra/bounc_ball",
+      "homepage": "",
+      "language": "Python",
+      "license": "GPL-3.0",
+      "topics": [],
+      "defaultBranch": "main",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-08-06T22:28:15Z",
+      "pushedAt": "2026-08-07T13:09:11Z"
+    },
+    {
+      "name": "bad_pass_gen_v2",
+      "description": "fork of the original, rewritten in GO",
+      "url": "https://github.com/etokiyra/bad_pass_gen_v2",
+      "homepage": "",
+      "language": "Go",
+      "license": "MIT",
+      "topics": [],
+      "defaultBranch": "main",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-08-01T22:53:22Z",
+      "pushedAt": "2026-08-02T07:58:31Z"
+    },
+    {
+      "name": "bad_pass_gen",
+      "description": "A very unsafe Password \"generator\" that uses rockyou.txt to give you a password",
+      "url": "https://github.com/etokiyra/bad_pass_gen",
+      "homepage": "",
+      "language": "Rust",
+      "license": "MIT",
+      "topics": [],
+      "defaultBranch": "main",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-08-01T12:56:12Z",
+      "pushedAt": "2026-08-01T13:04:31Z"
+    },
+    {
+      "name": "sassy_calc",
+      "description": "",
+      "url": "https://github.com/etokiyra/sassy_calc",
+      "homepage": "",
+      "language": "Rust",
+      "license": "Unlicense",
+      "topics": [],
+      "defaultBranch": "main",
+      "fork": false,
+      "archived": false,
+      "createdAt": "2026-08-01T08:58:17Z",
+      "pushedAt": "2026-08-01T11:52:01Z"
+    }
+  ],
+  "activity": [
+    {
+      "type": "commit",
+      "repo": "kemori",
+      "title": "feat(debug): launch Swift through lldb-dap",
+      "tag": "9b5215b",
+      "date": "2026-11-07T17:53:58Z",
+      "url": "https://github.com/etokiyra/kemori/commit/9b5215b29d9d94974a8e620b92db92ebc4283fad",
+      "summary": ""
+    },
+    {
+      "type": "release",
+      "repo": "kemori",
+      "title": "Kemori 3.2.1",
+      "tag": "v3.2.1",
+      "date": "2026-11-04T21:45:07Z",
+      "url": "https://github.com/etokiyra/kemori/releases/tag/v3.2.1",
+      "summary": "Kemori 3.2.1 Patch release for the 3.2.0 feature set. Fixed - The tool-provisioning test no longer expects a managed netcoredbg install on musl. The Linux netcoredbg archive links glibc/libstdc++, so musl builds intentionally have no install plan; the…"
+    },
+    {
+      "type": "release",
+      "repo": "kemori",
+      "title": "Kemori 3.2.0",
+      "tag": "v3.2.0",
+      "date": "2026-11-04T21:27:29Z",
+      "url": "https://github.com/etokiyra/kemori/releases/tag/v3.2.0",
+      "summary": "Kemori 3.2.0 Kemori is a zero-configuration, terminal-native IDE. Open a project and start coding: language detection, provisioned language servers and tools, editing, search, git, debugging and a real terminal in one binary. Highlights since 3.1.0 -…"
+    },
+    {
+      "type": "commit",
+      "repo": "opencode-config",
+      "title": "agent changes",
+      "tag": "f1667cd",
+      "date": "2026-11-02T08:26:29Z",
+      "url": "https://github.com/etokiyra/opencode-config/commit/f1667cd00a1cb7a3780b151f4cd9d82f0df7a9d1",
+      "summary": ""
+    },
+    {
+      "type": "commit",
+      "repo": "kitten",
+      "title": "docs: render bottom cat in fenced code block for correct spacing",
+      "tag": "61b41ca",
+      "date": "2026-10-31T01:21:55Z",
+      "url": "https://github.com/etokiyra/kitten/commit/61b41cae124851997c22d51db19920f14736122e",
+      "summary": ""
+    },
+    {
+      "type": "commit",
+      "repo": "vynl",
+      "title": "fix(player): silence decoder library log lines that painted the TUI",
+      "tag": "db22d94",
+      "date": "2026-10-30T08:28:30Z",
+      "url": "https://github.com/etokiyra/vynl/commit/db22d940196e3651789010009727e29c768df8e3",
+      "summary": ""
+    },
+    {
+      "type": "commit",
+      "repo": "caelestia-rice",
+      "title": "chore(license): release the rice into the public domain",
+      "tag": "2d7a2ad",
+      "date": "2026-10-29T16:40:00Z",
+      "url": "https://github.com/etokiyra/caelestia-rice/commit/2d7a2ad1fbf89235aacaf13657c11b113d533f31",
+      "summary": ""
+    },
+    {
+      "type": "commit",
+      "repo": "grimmoire",
+      "title": "docs: bring the README up to date with the story and prologue",
+      "tag": "f166b8d",
+      "date": "2026-10-17T09:06:12Z",
+      "url": "https://github.com/etokiyra/grimmoire/commit/f166b8d439de0f885af272aa4646a26648eaaef7",
+      "summary": ""
+    }
+  ]
+}

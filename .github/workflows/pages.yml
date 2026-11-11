@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Refresh the project data and deploy, even when nobody pushed the site.
+    - cron: "17 * * * *"
   workflow_dispatch:
+  repository_dispatch:
+    types:
+      - project-updated
 
 permissions:
   contents: read
@@ -27,6 +33,12 @@ jobs:
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
+
+      - name: Refresh project data, but never block a deploy on it
+        run: node tools/sync-github.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
 
       - name: Upload the static site
         uses: actions/upload-pages-artifact@v5
