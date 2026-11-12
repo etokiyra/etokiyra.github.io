@@ -68,9 +68,9 @@
       }
     },
     {
-      "name": "kitten",
-      "description": "A small, statically typed, garbage-collected language that compiles to native code — with a self-hosting compiler in progress.",
-      "url": "https://github.com/etokiyra/kitten",
+      "name": "percylang",
+      "description": "A small, statically typed, garbage-collected language that compiles to static native executables — with a Percy-written compiler and no C compiler in the build path.",
+      "url": "https://github.com/etokiyra/percylang",
       "homepage": "",
       "language": "Go",
       "license": "GPL-3.0",
@@ -93,7 +93,7 @@
         "sha": "61b41ca",
         "message": "docs: render bottom cat in fenced code block for correct spacing",
         "date": "2026-10-31T01:21:55Z",
-        "url": "https://github.com/etokiyra/kitten/commit/61b41cae124851997c22d51db19920f14736122e"
+        "url": "https://github.com/etokiyra/percylang/commit/61b41cae124851997c22d51db19920f14736122e"
       }
     },
     {
@@ -296,11 +296,11 @@
     },
     {
       "type": "commit",
-      "repo": "kitten",
+      "repo": "percylang",
       "title": "docs: render bottom cat in fenced code block for correct spacing",
       "tag": "61b41ca",
       "date": "2026-10-31T01:21:55Z",
-      "url": "https://github.com/etokiyra/kitten/commit/61b41cae124851997c22d51db19920f14736122e",
+      "url": "https://github.com/etokiyra/percylang/commit/61b41cae124851997c22d51db19920f14736122e",
       "summary": ""
     },
     {

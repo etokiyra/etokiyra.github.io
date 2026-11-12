@@ -232,7 +232,7 @@ sections work in preview without running the sync script first.
 ## Editing content
 
 - **Page copy and project descriptions:** `site/index.html`. Each featured project
-  is an `<article>` with an `id` (`kemori`, `kitten`, `vynl`, `grimmoire`,
+  is an `<article>` with an `id` (`kemori`, `percy`, `vynl`, `grimmoire`,
   `caelestia-rice`, `opencode-config`) and `data-repo` for the live facts.
 - **Colours, type, spacing, responsive rules:** the custom properties at the top of
   `site/assets/css/style.css`.

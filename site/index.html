@@ -215,11 +215,11 @@
               <span class="work-stack">Rust</span>
               <span class="work-arrow" aria-hidden="true">→</span>
             </a>
-            <a class="work-row" href="#kitten">
+            <a class="work-row" href="#percy">
               <span class="work-num">02</span>
-              <span class="work-name">Kitten</span>
+              <span class="work-name">Percy</span>
               <span class="work-desc">a language that compiles itself</span>
-              <span class="work-stack">Go · C</span>
+              <span class="work-stack">Percy · Go</span>
               <span class="work-arrow" aria-hidden="true">→</span>
             </a>
             <a class="work-row" href="#vynl">
@@ -319,7 +319,7 @@
               </div>
             </article>
 
-            <article class="project project-flip reveal" id="kitten" data-repo="kitten" aria-labelledby="kitten-title">
+            <article class="project project-flip reveal" id="percy" data-repo="percylang" aria-labelledby="percy-title">
               <div class="project-copy">
                 <div class="project-meta">
                   <span class="project-index">02</span>
@@ -327,45 +327,44 @@
                   <span class="project-status" data-repo-status>v0.1 · early</span>
                   <span class="project-updated" data-repo-updated hidden></span>
                 </div>
-                <h3 id="kitten-title">Kitten</h3>
-                <p class="project-kicker">a small language learning to compile itself</p>
+                <h3 id="percy-title">Percy</h3>
+                <p class="project-kicker">a small language that compiles itself</p>
                 <p>
-                  Kitten is a statically typed, garbage-collected language that compiles
+                  Percy is a statically typed, garbage-collected language that compiles
                   ahead-of-time to a real executable — not interpreted, not a bytecode VM.
                   The syntax borrows from C#, the smallness and tooling culture from Go, the
                   ecosystem ambition from Rust. The command-line tool is called
-                  <span class="mono">purr</span>; the files are <span class="mono">.ktn</span>.
+                  <span class="mono">purr</span>; the files are <span class="mono">.pcy</span>.
                 </p>
                 <p>
                   No null, no undefined behavior, no implicit conversions, and every match is
-                  exhaustive. The compiler is written in Go and emits C, which the host C
-                  compiler turns into a binary. A second compiler, written in Kitten, is being
-                  built one stage at a time and checked against the Go reference. Stages 1, 2
-                  and 3 now emit byte-identical C, which is the compiler equivalent of a cat
-                  landing on its feet.
+                  exhaustive. The toolchain is written in Percy and emits static binaries
+                  directly, with no C compiler in the build path. A frozen Go compiler stays
+                  behind as the bootstrap and as a differential oracle: the self-hosted stages
+                  agree with it byte for byte, down to diagnostics and positions.
                 </p>
                 <ul class="detail-list">
-                  <li><span aria-hidden="true">✦</span> Most languages make you choose between small and useful. Kitten refuses the trade.</li>
+                  <li><span aria-hidden="true">✦</span> Most languages make you choose between small and useful. Percy refuses the trade.</li>
                   <li><span aria-hidden="true">✦</span> <span class="mono">SPEC.md</span> is the source of truth. Undecided things are listed as undecided instead of quietly invented in code.</li>
                   <li><span aria-hidden="true">✦</span> The self-hosted compiler is compared against the Go reference across thousands of inputs, down to diagnostics and positions.</li>
                   <li><span aria-hidden="true">✦</span> No null. No undefined behavior. No implicit conversions. Every match is exhaustive.</li>
-                  <li><span aria-hidden="true">✦</span> Toolchain GPL-3.0-or-later; runtime MIT. The code you write in Kitten stays yours.</li>
+                  <li><span aria-hidden="true">✦</span> Toolchain GPL-3.0-or-later; runtime MIT. The code you write in Percy stays yours.</li>
                 </ul>
                 <div class="project-foot">
-                  <ul class="tech-list" aria-label="Kitten technologies">
-                    <li>Go</li><li>C</li><li>compilers</li><li>self-hosting</li>
+                  <ul class="tech-list" aria-label="Percy technologies">
+                    <li>Percy</li><li>Go</li><li>compilers</li><li>self-hosting</li>
                   </ul>
-                  <a class="project-link" href="https://github.com/etokiyra/kitten" target="_blank" rel="noopener">open kitten <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
+                  <a class="project-link" href="https://github.com/etokiyra/percylang" target="_blank" rel="noopener">open percy <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>
                 </div>
               </div>
 
               <div class="project-visual">
-                <div class="term term-kitten">
-                  <div class="term-bar"><span class="term-title">kitten</span><span>hello.ktn → native</span></div>
-                  <pre role="img" aria-label="A stylized pipeline sketch: purr compiles a Kitten source file through lexer, parser, checker and codegen, emits C, and a host C compiler produces the native binary. Three self-hosting stages produce byte-identical C.">
-  <span class="term-accent">$ purr run hello.ktn</span>
+                <div class="term term-percy">
+                  <div class="term-bar"><span class="term-title">percy</span><span>hello.pcy → native</span></div>
+                  <pre role="img" aria-label="A stylized pipeline sketch: purr compiles a Percy source file through the lexer, parser and checker, lowers it to native code, and writes a static executable. The self-hosting stages produce byte-identical output.">
+  <span class="term-accent">$ purr run hello.pcy</span>
 
-        <span class="term-accent">hello.ktn</span>
+        <span class="term-accent">hello.pcy</span>
             │
             ▼
     ┌────────┐   ┌────────┐   ┌─────────┐
@@ -374,10 +373,11 @@
                                    │
                                    ▼
                               ┌─────────┐
-                              │ codegen │──▶ <span class="term-mint">hello</span>
+                              │  native │──▶ <span class="term-mint">hello</span>
                               └─────────┘
 
     go ref ──▶ s1 ──▶ s2 ──▶ s3
+    same ELF, byte for byte
       <span class="term-pink">same C, byte for byte</span></pre>
                 </div>
                 <p class="figcaption">The self-hosting path, reduced to its shape.</p>
@@ -627,7 +627,7 @@
             <p>
               I don't have a grand theory of software. I have a habit: when something feels
               like magic, I take it apart until it stops. That's how Kemori grew a
-              language-server lifecycle, how Kitten ended up with a self-hosting compiler,
+              language-server lifecycle, how Percy ended up with a self-hosting compiler,
               and how vynl ended up with a ring buffer and an FFT.
             </p>
             <p>
@@ -781,7 +781,7 @@
               <div>
                 <h3>write the spec first</h3>
                 <p>
-                  Kitten has a <span class="mono">SPEC.md</span>. When code and spec disagree,
+                  Percy has a <span class="mono">SPEC.md</span>. When code and spec disagree,
                   the spec wins until I deliberately change it. It is a small rule that keeps me
                   from inventing a language by accident.
                 </p>
@@ -820,7 +820,7 @@
             </div>
             <ul class="desk-list">
               <li>
-                <a href="https://github.com/etokiyra/kitten" target="_blank" rel="noopener">kitten</a>
+                <a href="https://github.com/etokiyra/percylang" target="_blank" rel="noopener">percy</a>
                 <span>the self-hosted compiler catching up to the Go reference, one stage at a time.</span>
               </li>
               <li>

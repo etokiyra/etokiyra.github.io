@@ -505,7 +505,7 @@
       },
     },
     { id: "open:kemori", group: "projects", label: "kemori", hint: "the terminal-native IDE", run: () => goTo("#kemori") },
-    { id: "open:kitten", group: "projects", label: "kitten", hint: "a language learning to compile itself", run: () => goTo("#kitten") },
+    { id: "open:percy", group: "projects", label: "percy", hint: "a small language that compiles itself", run: () => goTo("#percy") },
     { id: "open:vynl", group: "projects", label: "vynl", hint: "a DJ booth in your terminal", run: () => goTo("#vynl") },
     { id: "open:grimmoire", group: "projects", label: "grimmoire", hint: "a dark-fantasy world in glyphs", run: () => goTo("#grimmoire") },
     { id: "open:caelestia-rice", group: "projects", label: "caelestia-rice", hint: "the desktop, dressed in glass", run: () => goTo("#caelestia-rice") },

@@ -864,7 +864,7 @@
 
   const files = {
     kemori: "an IDE that arrives already knowing the language. rust, built-in lsp, zero config.",
-    kitten: "a small language learning to compile itself. go + c; the tool is purr, the files are .ktn.",
+    percy: "a small language that compiles itself. percy + go; the tool is purr, the files are .pcy.",
     vynl: "a dj booth in your terminal. fft spectrum, vinyl mode, gapless playback. no browser required.",
     grimmoire: "an ascii-first rpg in a village that survived by feeding the water. rust, all glyphs.",
     suzu: "your terminal familiar. keeps predator hours. likes: boxes, the moon, and you (probably).",
@@ -877,7 +877,7 @@
 
   const targets = {
     kemori: "#kemori",
-    kitten: "#kitten",
+    percy: "#percy",
     vynl: "#vynl",
     grimmoire: "#grimmoire",
     about: "#about",
@@ -947,10 +947,10 @@
       ],
     },
     {
-      match: /\b(kemori|kitten|vynl|grimmoire)\b/,
+      match: /\b(kemori|percy|vynl|grimmoire)\b/,
       lines: [
         "suzu: kemori? the polite one. opens doors for languages.",
-        "suzu: kitten compiles itself. i supervise. mostly i sit on the spec.",
+        "suzu: percy compiles itself. i supervise. mostly i sit on the spec.",
         "suzu: vynl goes brrr correctly. 1024-point fft. i checked.",
         "suzu: grimmoire is the dark forest story. i am technically in it. as a shadow.",
         "suzu: four worlds and i live in the best one. the windowsill.",
@@ -1072,7 +1072,7 @@
           "  help        — this list",
           "  whoami      — who is kiyra",
           "  ls          — look around",
-          "  cat <name>  — read: kemori, kitten, vynl, grimmoire, suzu, ~/.why",
+          "  cat <name>  — read: kemori, percy, vynl, grimmoire, suzu, ~/.why",
           "  open <name> — jump to a project or section",
           "  talk <...>  — actually talk to suzu. she has opinions.",
           "  ask <...>   — ask suzu anything. answers are legally binding.",
@@ -1098,7 +1098,7 @@
       whois: () => commands.whoami(),
       ls: () => {
         asleepNote();
-        return "kemori/  kitten/  vynl/  grimmoire/  signal/  contact/  suzu  ~/.why";
+        return "kemori/  percy/  vynl/  grimmoire/  signal/  contact/  suzu  ~/.why";
       },
       pwd: () => {
         asleepNote();

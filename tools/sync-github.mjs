@@ -23,7 +23,7 @@ const OWNER = "etokiyra";
 /* Hand-picked order for the big cards. Everything else is discovered. */
 const FEATURED = [
   "kemori",
-  "kitten",
+  "percylang",
   "vynl",
   "grimmoire",
   "caelestia-rice",
